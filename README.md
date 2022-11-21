@@ -20,7 +20,7 @@ $ npm install -g ra-protocol
 $ ra-protocol COMMAND
 running command...
 $ ra-protocol (--version)
-ra-protocol/0.0.0 darwin-x64 node-v14.18.1
+ra-protocol/0.1.0 darwin-x64 node-v14.18.1
 $ ra-protocol --help [COMMAND]
 USAGE
   $ ra-protocol COMMAND
@@ -69,7 +69,7 @@ FLAG DESCRIPTIONS
         solana: Solana
 ```
 
-_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.0.0/dist/commands/check-flashable/index.ts)_
+_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.1.0/dist/commands/check-flashable/index.ts)_
 
 ## `ra-protocol check-most-liquid-flash`
 
@@ -103,7 +103,7 @@ FLAG DESCRIPTIONS
         solana: Solana
 ```
 
-_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.0.0/dist/commands/check-most-liquid-flash/index.ts)_
+_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.1.0/dist/commands/check-most-liquid-flash/index.ts)_
 
 ## `ra-protocol compile`
 
@@ -129,7 +129,7 @@ FLAG DESCRIPTIONS
     The compiler ID being called (Should be set in the ra.config.js file)
 ```
 
-_See code: [dist/commands/compile/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.0.0/dist/commands/compile/index.ts)_
+_See code: [dist/commands/compile/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.1.0/dist/commands/compile/index.ts)_
 
 ## `ra-protocol deploy`
 
@@ -165,7 +165,7 @@ FLAG DESCRIPTIONS
         this: From the same contract
 ```
 
-_See code: [dist/commands/deploy/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.0.0/dist/commands/deploy/index.ts)_
+_See code: [dist/commands/deploy/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.1.0/dist/commands/deploy/index.ts)_
 
 ## `ra-protocol help [COMMAND]`
 
@@ -242,7 +242,7 @@ FLAG DESCRIPTIONS
         custom: Custom logic
 ```
 
-_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.0.0/dist/commands/quickflash/index.ts)_
+_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.1.0/dist/commands/quickflash/index.ts)_
 
 ## `ra-protocol simulate`
 
@@ -285,5 +285,5 @@ FLAG DESCRIPTIONS
         this: From the same contract
 ```
 
-_See code: [dist/commands/simulate/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.0.0/dist/commands/simulate/index.ts)_
+_See code: [dist/commands/simulate/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.1.0/dist/commands/simulate/index.ts)_
 <!-- commandsstop -->
