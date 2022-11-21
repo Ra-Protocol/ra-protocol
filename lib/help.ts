@@ -1,3 +1,5 @@
+const {readFileSync} = require('fs')
+const {resolve} = require('path')
 const {dim} = require('chalk')
 const {Help, CommandHelp} = require('@oclif/core')
 
@@ -92,4 +94,8 @@ class MyCommandHelpClass extends CommandHelp {
 
 module.exports = class MyHelpClass extends Help {
   CommandHelpClass = MyCommandHelpClass
+  showRootHelp() {
+    this.log(readFileSync(resolve(__dirname, 'logo.ans'), 'utf8'))
+    super.showRootHelp()
+  }
 }
