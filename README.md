@@ -1,13 +1,13 @@
-oclif-hello-world
+ra-protocol
 =================
 
-oclif example Hello World CLI
+RA Protocol CLI
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
-[![CircleCI](https://circleci.com/gh/oclif/hello-world/tree/main.svg?style=shield)](https://circleci.com/gh/oclif/hello-world/tree/main)
-[![Downloads/week](https://img.shields.io/npm/dw/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
-[![License](https://img.shields.io/npm/l/oclif-hello-world.svg)](https://github.com/oclif/hello-world/blob/main/package.json)
+[![Version](https://img.shields.io/npm/v/oclif-hello-world.svg)](https://npmjs.org/package/ra-protocol)
+[![CircleCI](https://circleci.com/gh/oclif/hello-world/tree/main.svg?style=shield)](https://circleci.com/gh/Ra-Protocol/ra-protocol/tree/main)
+[![Downloads/week](https://img.shields.io/npm/dw/oclif-hello-world.svg)](https://npmjs.org/package/ra-protocol)
+[![License](https://img.shields.io/npm/l/oclif-hello-world.svg)](https://github.com/Ra-Protocol/ra-protocol/blob/main/package.json)
 
 <!-- toc -->
 * [Usage](#usage)
@@ -29,58 +29,143 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`ra-protocol hello PERSON`](#ra-protocol-hello-person)
-* [`ra-protocol hello world`](#ra-protocol-hello-world)
+* [`ra-protocol check-flashable`](#ra-protocol-check-flashable)
+* [`ra-protocol check-most-liquid-flash`](#ra-protocol-check-most-liquid-flash)
+* [`ra-protocol compile`](#ra-protocol-compile)
+* [`ra-protocol deploy`](#ra-protocol-deploy)
 * [`ra-protocol help [COMMAND]`](#ra-protocol-help-command)
-* [`ra-protocol plugins`](#ra-protocol-plugins)
-* [`ra-protocol plugins:install PLUGIN...`](#ra-protocol-pluginsinstall-plugin)
-* [`ra-protocol plugins:inspect PLUGIN...`](#ra-protocol-pluginsinspect-plugin)
-* [`ra-protocol plugins:install PLUGIN...`](#ra-protocol-pluginsinstall-plugin-1)
-* [`ra-protocol plugins:link PLUGIN`](#ra-protocol-pluginslink-plugin)
-* [`ra-protocol plugins:uninstall PLUGIN...`](#ra-protocol-pluginsuninstall-plugin)
-* [`ra-protocol plugins:uninstall PLUGIN...`](#ra-protocol-pluginsuninstall-plugin-1)
-* [`ra-protocol plugins:uninstall PLUGIN...`](#ra-protocol-pluginsuninstall-plugin-2)
-* [`ra-protocol plugins update`](#ra-protocol-plugins-update)
+* [`ra-protocol quickflash`](#ra-protocol-quickflash)
+* [`ra-protocol simulate`](#ra-protocol-simulate)
 
-## `ra-protocol hello PERSON`
+## `ra-protocol check-flashable`
 
-Say hello
+Check the amount of liquidity currently flashable for a certain asset on a certain chain
 
 ```
 USAGE
-  $ ra-protocol hello [PERSON] -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
+  $ ra-protocol check-flashable -c ethereum|bsc|avalanche|solana [-a <value>]
 
 FLAGS
-  -f, --from=<value>  (required) Who is saying hello
+  -a, --asset=<value>                          specify asset (Optional)
+  -c, --chain=(ethereum|bsc|avalanche|solana)  (required) specify which chain
 
 DESCRIPTION
-  Say hello
+  Check the amount of liquidity currently flashable for a certain asset on a certain chain
 
 EXAMPLES
-  $ oex hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
+  $ ra-protocol check-flashable --chain ethereum
+  Checking complete
+
+FLAG DESCRIPTIONS
+  -a, --asset=<value>  
+
+    specify asset (Optional)
+
+  -c, --chain=(ethereum|bsc|avalanche|solana)
+
+        ethereum: Ethereum
+        bsc: Binance Smart Chain
+        avalanche: Avalanche
+        solana: Solana
 ```
 
-_See code: [dist/commands/hello/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.0.0/dist/commands/hello/index.ts)_
+_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.0.0/dist/commands/check-flashable/index.ts)_
 
-## `ra-protocol hello world`
+## `ra-protocol check-most-liquid-flash`
 
-Say hello world
+Checks all connected chains for the most liquid network available to flash loan an input asset
 
 ```
 USAGE
-  $ ra-protocol hello world
+  $ ra-protocol check-most-liquid-flash -c ethereum|bsc|avalanche|solana [-a <value>]
+
+FLAGS
+  -a, --asset=<value>                          specify asset (Optional)
+  -c, --chain=(ethereum|bsc|avalanche|solana)  (required) specify which chain
 
 DESCRIPTION
-  Say hello world
+  Checks all connected chains for the most liquid network available to flash loan an input asset
 
 EXAMPLES
-  $ ra-protocol hello world
-  hello world! (./src/commands/hello/world.ts)
+  $ ra-protocol check-most-liquid-flash --chain ethereum
+  Checking complete
+
+FLAG DESCRIPTIONS
+  -a, --asset=<value>  
+
+    specify asset (Optional)
+
+  -c, --chain=(ethereum|bsc|avalanche|solana)
+
+        ethereum: Ethereum
+        bsc: Binance Smart Chain
+        avalanche: Avalanche
+        solana: Solana
 ```
+
+_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.0.0/dist/commands/check-most-liquid-flash/index.ts)_
+
+## `ra-protocol compile`
+
+Compiles the files in ‘contracts’ and then fills the build folder
+
+```
+USAGE
+  $ ra-protocol compile -c <value>
+
+FLAGS
+  -c, --compiler=<value>  (required) The compiler ID being called (Should be set in the ra.config.js file)
+
+DESCRIPTION
+  Compiles the files in ‘contracts’ and then fills the build folder
+
+EXAMPLES
+  $ ra-protocol compile --compiler 0.8.0
+  Compilation complete
+
+FLAG DESCRIPTIONS
+  -c, --compiler=<value>  
+
+    The compiler ID being called (Should be set in the ra.config.js file)
+```
+
+_See code: [dist/commands/compile/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.0.0/dist/commands/compile/index.ts)_
+
+## `ra-protocol deploy`
+
+Deploy a contract that has been compiled
+
+```
+USAGE
+  $ ra-protocol deploy -c ethereum|bsc|avalanche|solana -f eoa|sep|this
+
+FLAGS
+  -c, --chain=(ethereum|bsc|avalanche|solana)  (required) specify which chain
+  -f, --from=(eoa|sep|this)                    (required) specify where flash should be from
+
+DESCRIPTION
+  Deploy a contract that has been compiled
+
+EXAMPLES
+  $ ra-protocol deploy --chain ethereum --from eao
+  Deployment complete
+
+FLAG DESCRIPTIONS
+  -c, --chain=(ethereum|bsc|avalanche|solana)
+
+        ethereum: Ethereum
+        bsc: Binance Smart Chain
+        avalanche: Avalanche
+        solana: Solana
+
+  -f, --from=(eoa|sep|this)
+
+        eao: From your EOA
+        sep: From a separate contract
+        this: From the same contract
+```
+
+_See code: [dist/commands/deploy/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.0.0/dist/commands/deploy/index.ts)_
 
 ## `ra-protocol help [COMMAND]`
 
@@ -98,237 +183,107 @@ FLAGS
 
 DESCRIPTION
   Display help for ra-protocol.
+
+FLAG DESCRIPTIONS
+  -n, --nested-commands  
+
+    Include all nested commands in the output.
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.18/src/commands/help.ts)_
 
-## `ra-protocol plugins`
+## `ra-protocol quickflash`
 
-List installed plugins.
+Easiest, quickest option to get a flash loan up and running
 
 ```
 USAGE
-  $ ra-protocol plugins [--core]
+  $ ra-protocol quickflash -c ethereum|bsc|avalanche|solana -t
+    arb|liquidate|collateral-swap|eipfl|multiasset|custom
 
 FLAGS
-  --core  Show core plugins.
+  -c, --chain=(ethereum|bsc|avalanche|solana)                         (required) specify which chain
+  -t, --type=(arb|liquidate|collateral-swap|eipfl|multiasset|custom)  (required) Specify the type of flash loan preset
 
 DESCRIPTION
-  List installed plugins.
+  Easiest, quickest option to get a flash loan up and running
 
 EXAMPLES
-  $ ra-protocol plugins
+  $ ra-protocol quickflash --compiler 0.8.0
+  Compilation complete
+
+FLAG DESCRIPTIONS
+  -c, --chain=(ethereum|bsc|avalanche|solana)
+
+        ethereum: Ethereum
+        bsc: Binance Smart Chain
+        avalanche: Avalanche
+        solana: Solana
+
+  -t, --type=(arb|liquidate|collateral-swap|eipfl|multiasset|custom)
+
+        arb: Basic arbitrage flash loan layout
+             This will call an iteration of flashloanSimple, which calls makeArbitrage, swapping the
+             flashloaned token for another token using one swap router, and then swapping back to the original
+             token using another swap router
+
+        liquidate: Basic liquidation flash loan
+                   This will call an iteration of flashloanSimple, which calls makeArbitrage, adding the
+                   flashloaned tokens as well as tokens within our contract balance as liquidity on a
+                   token pair (AKA liquidity pool), and then removing the same amount of liquidity
+
+        collateral-swap: Collateral swap flash loan
+        eipfl: EIP-3156 interface flash loan
+        multiasset: Multi-asset flash loan
+                    This will call an iteration of flashloan, which borrows more than 1 token, which can
+                    then be swapped, added as liquidity, etc. as long as all borrowed token amounts are
+                    paid back at the end
+
+        custom: Custom logic
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.1.6/src/commands/plugins/index.ts)_
+_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.0.0/dist/commands/quickflash/index.ts)_
 
-## `ra-protocol plugins:install PLUGIN...`
+## `ra-protocol simulate`
 
-Installs a plugin into the CLI.
+Simulates by running the simulate-default.js or simulate-custom.js files depending on the selection
 
 ```
 USAGE
-  $ ra-protocol plugins:install PLUGIN...
-
-ARGUMENTS
-  PLUGIN  Plugin to install.
+  $ ra-protocol simulate -f eoa|sep|this [-d mainnet|testnet] [-c mainnet|testnet]
 
 FLAGS
-  -f, --force    Run yarn install with force flag.
-  -h, --help     Show CLI help.
-  -v, --verbose
+  -c, --simulate-custom=(mainnet|testnet)   **USES TENDERLY** - Flash loan simulation function with custom logic file,
+                                            uses “simulate-custom.js” file in “simulations” directory
+  -d, --simulate-default=(mainnet|testnet)  **USES TENDERLY** - Required on flash loan simulation functions with default
+                                            simulation parameters, uses “simulate-default.js” file in “simulations”
+                                            directory
+  -f, --from=(eoa|sep|this)                 (required) specify where flash should be from
 
 DESCRIPTION
-  Installs a plugin into the CLI.
-  Can be installed from npm or a git url.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
-  the CLI without the need to patch and update the whole CLI.
-
-
-ALIASES
-  $ ra-protocol plugins add
+  Simulates by running the simulate-default.js or simulate-custom.js files depending on the selection
 
 EXAMPLES
-  $ ra-protocol plugins:install myplugin 
+  $ ra-protocol simulate default --from sep --simulate-custom testnet
+  Default simulation is complete
 
-  $ ra-protocol plugins:install https://github.com/someuser/someplugin
+FLAG DESCRIPTIONS
+  -c, --simulate-custom=(mainnet|testnet)  
 
-  $ ra-protocol plugins:install someuser/someplugin
+    **USES TENDERLY** - Flash loan simulation function with custom logic file, uses “simulate-custom.js” file in
+    “simulations” directory
+
+  -d, --simulate-default=(mainnet|testnet)  
+
+    **USES TENDERLY** - Required on flash loan simulation functions with default simulation parameters, uses
+    “simulate-default.js” file in “simulations” directory
+
+  -f, --from=(eoa|sep|this)
+
+        eao: From your EOA
+        sep: From a separate contract
+        this: From the same contract
 ```
 
-## `ra-protocol plugins:inspect PLUGIN...`
-
-Displays installation properties of a plugin.
-
-```
-USAGE
-  $ ra-protocol plugins:inspect PLUGIN...
-
-ARGUMENTS
-  PLUGIN  [default: .] Plugin to inspect.
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Displays installation properties of a plugin.
-
-EXAMPLES
-  $ ra-protocol plugins:inspect myplugin
-```
-
-## `ra-protocol plugins:install PLUGIN...`
-
-Installs a plugin into the CLI.
-
-```
-USAGE
-  $ ra-protocol plugins:install PLUGIN...
-
-ARGUMENTS
-  PLUGIN  Plugin to install.
-
-FLAGS
-  -f, --force    Run yarn install with force flag.
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Installs a plugin into the CLI.
-  Can be installed from npm or a git url.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
-  the CLI without the need to patch and update the whole CLI.
-
-
-ALIASES
-  $ ra-protocol plugins add
-
-EXAMPLES
-  $ ra-protocol plugins:install myplugin 
-
-  $ ra-protocol plugins:install https://github.com/someuser/someplugin
-
-  $ ra-protocol plugins:install someuser/someplugin
-```
-
-## `ra-protocol plugins:link PLUGIN`
-
-Links a plugin into the CLI for development.
-
-```
-USAGE
-  $ ra-protocol plugins:link PLUGIN
-
-ARGUMENTS
-  PATH  [default: .] path to plugin
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Links a plugin into the CLI for development.
-  Installation of a linked plugin will override a user-installed or core plugin.
-
-  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
-  command will override the user-installed or core plugin implementation. This is useful for development work.
-
-
-EXAMPLES
-  $ ra-protocol plugins:link myplugin
-```
-
-## `ra-protocol plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ ra-protocol plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ ra-protocol plugins unlink
-  $ ra-protocol plugins remove
-```
-
-## `ra-protocol plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ ra-protocol plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ ra-protocol plugins unlink
-  $ ra-protocol plugins remove
-```
-
-## `ra-protocol plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ ra-protocol plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ ra-protocol plugins unlink
-  $ ra-protocol plugins remove
-```
-
-## `ra-protocol plugins update`
-
-Update installed plugins.
-
-```
-USAGE
-  $ ra-protocol plugins update [-h] [-v]
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Update installed plugins.
-```
+_See code: [dist/commands/simulate/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.0.0/dist/commands/simulate/index.ts)_
 <!-- commandsstop -->

@@ -42,15 +42,11 @@
     "dirname": "ra-protocol",
     "commands": "./dist/commands",
     "plugins": [
-      "@oclif/plugin-help",
-      "@oclif/plugin-plugins"
+      "@oclif/plugin-help"
     ],
+    "helpClass": "./lib/help",
     "topicSeparator": " ",
-    "topics": {
-      "hello": {
-        "description": "Say hello to the world and others"
-      }
-    }
+    "topics": {}
   },
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
