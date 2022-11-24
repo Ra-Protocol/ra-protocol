@@ -1,6 +1,7 @@
-import {Command, Flags} from '@oclif/core'
+import {BaseCommand} from '../../baseCommand'
+import {Flags} from '@oclif/core'
 
-export default class Compile extends Command {
+export default class Compile extends BaseCommand<any> {
   static description = 'Compiles the files in ‘contracts’ and then fills the build folder'
 
   static examples = [

@@ -1,7 +1,8 @@
-import {Command, Flags} from '@oclif/core'
+import {BaseCommand} from '../../baseCommand'
 import {from} from '../../flags'
+import {Flags} from '@oclif/core'
 
-export default class Simulate extends Command {
+export default class Simulate extends BaseCommand<any> {
   static description = 'Simulates by running the simulate-default.js or simulate-custom.js files depending on the selection'
 
   static examples = [

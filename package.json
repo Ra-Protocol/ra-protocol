@@ -19,11 +19,13 @@
   "dependencies": {
     "@oclif/core": "^1.19.1",
     "@oclif/plugin-help": "^5",
-    "@oclif/plugin-plugins": "^2.1.6"
+    "@oclif/plugin-plugins": "^2.1.6",
+    "fs-extra": "^10.1.0"
   },
   "devDependencies": {
     "@oclif/test": "^2.2.10",
     "@types/chai": "^4",
+    "@types/fs-extra": "^9.0.13",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.18.3",
     "chai": "^4",
@@ -46,7 +48,11 @@
     ],
     "helpClass": "./lib/help",
     "topicSeparator": " ",
-    "topics": {}
+    "topics": {
+      "config": {
+        "hidden": true
+      }
+    }
   },
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",

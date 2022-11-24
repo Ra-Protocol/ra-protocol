@@ -1,7 +1,7 @@
-import {Command} from '@oclif/core'
+import {BaseCommand} from '../../baseCommand'
 import {chain, type} from '../../flags'
 
-export default class Quickflash extends Command {
+export default class Quickflash extends BaseCommand<any> {
   static description = 'Easiest, quickest option to get a flash loan up and running'
 
   static examples = [

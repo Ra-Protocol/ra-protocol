@@ -1,6 +1,6 @@
 const {readFileSync} = require('fs')
 const {join} = require('path')
-const {dim} = require('chalk')
+const {dim, bold} = require('chalk')
 const {Help, CommandHelp} = require('@oclif/core')
 
 const optionDescriptions = {
@@ -14,6 +14,18 @@ const optionDescriptions = {
     eao: 'From your EOA',
     sep: 'From a separate contract',
     this: 'From the same contract',
+  },
+  privacy: {
+    pub: 'Transaction should be sent publicly (visible in the mempool)',
+    secret: 'Should be sent in a secret channel in order to prevent front-running or copying of your transaction',
+  },
+  'protocol-aave': {
+    v2: 'older AAVE protocol, however still available for use & required for Ethereum Mainnet (aave-v3 does not support this)',
+    v3: 'the most recent iteration of the AAVE protocol',
+  },
+  'protocol-uni': {
+    v2: 'the standard generally used across all swap routers (Uniswap, Trader Joe, etc)',
+    v3: 'discrepancies between other routers as most are identical to UniswapV2',
   },
   type: {
     arb: 'Basic arbitrage flash loan layout',
@@ -84,6 +96,38 @@ class MyCommandHelpClass extends CommandHelp {
     }).join('\n\n')
 
     return body
+  }
+
+  configUsage() {
+    const configUsage = {
+      all: [
+        'protocol-aave',
+        'protocol-uni',
+        'privacy',
+        'tenderly-key',
+        'tenderly-user',
+        'tenderly-project',
+      ],
+    }
+    const exclude = [
+      'config',
+      'config get',
+      'config set',
+    ]
+    return exclude.includes(this.command.id) ? null :
+      'This command behavior affected by following config variables: ' + configUsage['all'].join(', ') + '\n\n' +
+      'For details run\n' +
+      bold('$') + ' ra-protocol config set --help'
+  }
+
+  sections() {
+    return [
+      ...super.sections(),
+      {
+        header: 'CONFIG USAGE',
+        generate: () => this.configUsage(),
+      },
+    ]
   }
 }
 
