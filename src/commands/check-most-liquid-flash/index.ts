@@ -1,7 +1,7 @@
-import {Command} from '@oclif/core'
+import {BaseCommand} from '../../baseCommand'
 import {asset, chain} from '../../flags'
 
-export default class CheckMostLiquidFlash extends Command {
+export default class CheckMostLiquidFlash extends BaseCommand<any> {
   static description = 'Checks all connected chains for the most liquid network available to flash loan an input asset'
 
   static examples = [
