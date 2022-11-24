@@ -1,7 +1,7 @@
-import {Command} from '@oclif/core'
+import {BaseCommand} from '../../baseCommand'
 import {chain, from} from '../../flags'
 
-export default class Deploy extends Command {
+export default class Deploy extends BaseCommand<any> {
   static description = 'Deploy a contract that has been compiled'
 
   static examples = [
