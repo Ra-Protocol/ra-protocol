@@ -20,7 +20,7 @@ $ npm install -g ra-protocol
 $ ra-protocol COMMAND
 running command...
 $ ra-protocol (--version)
-ra-protocol/0.1.0 darwin-x64 node-v14.18.1
+ra-protocol/0.2.0 darwin-x64 node-v14.18.1
 $ ra-protocol --help [COMMAND]
 USAGE
   $ ra-protocol COMMAND
@@ -32,6 +32,9 @@ USAGE
 * [`ra-protocol check-flashable`](#ra-protocol-check-flashable)
 * [`ra-protocol check-most-liquid-flash`](#ra-protocol-check-most-liquid-flash)
 * [`ra-protocol compile`](#ra-protocol-compile)
+* [`ra-protocol config`](#ra-protocol-config)
+* [`ra-protocol config get`](#ra-protocol-config-get)
+* [`ra-protocol config set`](#ra-protocol-config-set)
 * [`ra-protocol deploy`](#ra-protocol-deploy)
 * [`ra-protocol help [COMMAND]`](#ra-protocol-help-command)
 * [`ra-protocol quickflash`](#ra-protocol-quickflash)
@@ -54,7 +57,7 @@ DESCRIPTION
 
 EXAMPLES
   $ ra-protocol check-flashable --chain ethereum
-  Checking complete
+  Checking is complete
 
 FLAG DESCRIPTIONS
   -a, --asset=<value>  
@@ -67,9 +70,15 @@ FLAG DESCRIPTIONS
         bsc: Binance Smart Chain
         avalanche: Avalanche
         solana: Solana
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy, tenderly-key, tenderly-user, tenderly-project
+
+  For details run
+  $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.1.0/dist/commands/check-flashable/index.ts)_
+_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/check-flashable/index.ts)_
 
 ## `ra-protocol check-most-liquid-flash`
 
@@ -88,7 +97,7 @@ DESCRIPTION
 
 EXAMPLES
   $ ra-protocol check-most-liquid-flash --chain ethereum
-  Checking complete
+  Checking is complete
 
 FLAG DESCRIPTIONS
   -a, --asset=<value>  
@@ -101,9 +110,15 @@ FLAG DESCRIPTIONS
         bsc: Binance Smart Chain
         avalanche: Avalanche
         solana: Solana
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy, tenderly-key, tenderly-user, tenderly-project
+
+  For details run
+  $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.1.0/dist/commands/check-most-liquid-flash/index.ts)_
+_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/check-most-liquid-flash/index.ts)_
 
 ## `ra-protocol compile`
 
@@ -127,9 +142,112 @@ FLAG DESCRIPTIONS
   -c, --compiler=<value>  
 
     The compiler ID being called (Should be set in the ra.config.js file)
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy, tenderly-key, tenderly-user, tenderly-project
+
+  For details run
+  $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/compile/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.1.0/dist/commands/compile/index.ts)_
+_See code: [dist/commands/compile/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/compile/index.ts)_
+
+## `ra-protocol config`
+
+Get/Set configuration
+
+```
+USAGE
+  $ ra-protocol config
+
+DESCRIPTION
+  Get/Set configuration
+```
+
+_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/config/index.ts)_
+
+## `ra-protocol config get`
+
+Displays configuration
+
+```
+USAGE
+  $ ra-protocol config get
+
+DESCRIPTION
+  Displays configuration
+
+EXAMPLES
+  $ ra-protocol config get
+  Current configuration:
+    protocol-aave: v3
+    protocol-uni: v2
+    privacy: pub
+    tenderly-key: 4EFyPxPtcoyB4BFNAypscds2yI8mZGzM
+    tenderly-user: cinderella
+    tenderly-project: to-the-moon
+```
+
+## `ra-protocol config set`
+
+Updates configuration
+
+```
+USAGE
+  $ ra-protocol config set [--protocol-aave v2|v3] [--protocol-uni v2|v3] [--privacy pub|secret] [--tenderly-key
+    <value>] [--tenderly-user <value>] [--tenderly-project <value>]
+
+FLAGS
+  --privacy=(pub|secret)      Transaction visiblity in the mempool
+  --protocol-aave=(v2|v3)     Flash Loan protocol
+  --protocol-uni=(v2|v3)      DEX protocol
+  --tenderly-key=<value>      TENDERLY_ACCESS_KEY - generate at https://dashboard.tenderly.co/account/authorization
+  --tenderly-project=<value>  TENDERLY_PROJECT - generate at https://dashboard.tenderly.co/projects/create or get from
+                              https://dashboard.tenderly.co/projects
+  --tenderly-user=<value>     TENDERLY_USER - get from https://dashboard.tenderly.co/account
+
+DESCRIPTION
+  Updates configuration
+
+EXAMPLES
+  $ ra-protocol set --privacy secret
+    protocol-aave: v3
+    protocol-uni: v2
+    privacy: secret
+    tenderly-key: 4EFyPxPtcoyB4BFNAypscds2yI8mZGzM
+    tenderly-user: cinderella
+    tenderly-project: to-the-moon
+  Configuration updated
+
+FLAG DESCRIPTIONS
+  --privacy=(pub|secret)
+
+        pub: Transaction should be sent publicly (visible in the mempool)
+        secret: Should be sent in a secret channel in order to prevent front-running or copying of your transaction
+
+  --protocol-aave=(v2|v3)
+
+        v2: older AAVE protocol, however still available for use & required for Ethereum Mainnet (aave-v3 does not support this)
+        v3: the most recent iteration of the AAVE protocol
+
+  --protocol-uni=(v2|v3)
+
+        v2: the standard generally used across all swap routers (Uniswap, Trader Joe, etc)
+        v3: discrepancies between other routers as most are identical to UniswapV2
+
+  --tenderly-key=<value>  
+
+    TENDERLY_ACCESS_KEY - generate at https://dashboard.tenderly.co/account/authorization
+
+  --tenderly-project=<value>  
+
+    TENDERLY_PROJECT - generate at https://dashboard.tenderly.co/projects/create or get from
+    https://dashboard.tenderly.co/projects
+
+  --tenderly-user=<value>  
+
+    TENDERLY_USER - get from https://dashboard.tenderly.co/account
+```
 
 ## `ra-protocol deploy`
 
@@ -148,7 +266,7 @@ DESCRIPTION
 
 EXAMPLES
   $ ra-protocol deploy --chain ethereum --from eao
-  Deployment complete
+  Deployment is complete
 
 FLAG DESCRIPTIONS
   -c, --chain=(ethereum|bsc|avalanche|solana)
@@ -163,9 +281,15 @@ FLAG DESCRIPTIONS
         eao: From your EOA
         sep: From a separate contract
         this: From the same contract
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy, tenderly-key, tenderly-user, tenderly-project
+
+  For details run
+  $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/deploy/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.1.0/dist/commands/deploy/index.ts)_
+_See code: [dist/commands/deploy/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/deploy/index.ts)_
 
 ## `ra-protocol help [COMMAND]`
 
@@ -188,6 +312,12 @@ FLAG DESCRIPTIONS
   -n, --nested-commands  
 
     Include all nested commands in the output.
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy, tenderly-key, tenderly-user, tenderly-project
+
+  For details run
+  $ ra-protocol config set --help
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.18/src/commands/help.ts)_
@@ -210,7 +340,7 @@ DESCRIPTION
 
 EXAMPLES
   $ ra-protocol quickflash --compiler 0.8.0
-  Compilation complete
+  Flashloan is complete
 
 FLAG DESCRIPTIONS
   -c, --chain=(ethereum|bsc|avalanche|solana)
@@ -240,9 +370,15 @@ FLAG DESCRIPTIONS
                     paid back at the end
 
         custom: Custom logic
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy, tenderly-key, tenderly-user, tenderly-project
+
+  For details run
+  $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.1.0/dist/commands/quickflash/index.ts)_
+_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/quickflash/index.ts)_
 
 ## `ra-protocol simulate`
 
@@ -265,7 +401,7 @@ DESCRIPTION
 
 EXAMPLES
   $ ra-protocol simulate default --from sep --simulate-custom testnet
-  Default simulation is complete
+  Simulation is complete
 
 FLAG DESCRIPTIONS
   -c, --simulate-custom=(mainnet|testnet)  
@@ -283,7 +419,13 @@ FLAG DESCRIPTIONS
         eao: From your EOA
         sep: From a separate contract
         this: From the same contract
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy, tenderly-key, tenderly-user, tenderly-project
+
+  For details run
+  $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/simulate/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.1.0/dist/commands/simulate/index.ts)_
+_See code: [dist/commands/simulate/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/simulate/index.ts)_
 <!-- commandsstop -->
