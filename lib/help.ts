@@ -1,5 +1,5 @@
 const {readFileSync} = require('fs')
-const {resolve} = require('path')
+const {join} = require('path')
 const {dim} = require('chalk')
 const {Help, CommandHelp} = require('@oclif/core')
 
@@ -48,13 +48,8 @@ class MyCommandHelpClass extends CommandHelp {
       if (flag.required) right = `(required) ${right}`
 
       if (flag.type === 'option' && flag.options && !flag.helpValue && !this.opts.showFlagOptionsInTitle) {
-        console.log(flag)
-        console.log(flag.optionDescriptions)
         if (flag.optionDescriptions) {
           right += `\n<options: ${Object.keys(flag.optionDescriptions).join('|')}>`
-          for (const description in Object.values(flag.optionDescriptions)) {
-            console.log(description)
-          }
         } else {
           right += `\n<options: ${flag.options.join('|')}>`
         }
@@ -95,7 +90,7 @@ class MyCommandHelpClass extends CommandHelp {
 module.exports = class MyHelpClass extends Help {
   CommandHelpClass = MyCommandHelpClass
   showRootHelp() {
-    this.log(readFileSync(resolve(__dirname, 'logo.ans'), 'utf8'))
+    this.log(readFileSync(join(__dirname, 'logo.ans'), 'utf8'))
     super.showRootHelp()
   }
 }
