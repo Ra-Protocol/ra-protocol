@@ -14,7 +14,19 @@ export const chain = Flags.enum({
 
 export const asset = Flags.string({
   char: 'a',
-  description: 'specify asset (Optional)'
+  description: 'specify asset',
+  multiple: true,
+  required: true
+})
+
+export const value = Flags.string({
+  char: 'v',
+  description: 'specify value'
+})
+
+export const mainnet = Flags.boolean({
+  char: 'm',
+  description: 'specify to run on mainnet'
 })
 
 export const from = Flags.enum({
