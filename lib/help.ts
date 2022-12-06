@@ -104,6 +104,8 @@ class MyCommandHelpClass extends CommandHelp {
         'protocol-aave',
         'protocol-uni',
         'privacy',
+      ],
+      simulate: [
         'tenderly-key',
         'tenderly-user',
         'tenderly-project',
@@ -114,8 +116,9 @@ class MyCommandHelpClass extends CommandHelp {
       'config get',
       'config set',
     ]
+    const commandConfigUsage = configUsage[this.command.id] ? [...configUsage['all'], ...configUsage[this.command.id]] : configUsage['all']
     return exclude.includes(this.command.id) ? null :
-      'This command behavior affected by following config variables: ' + configUsage['all'].join(', ') + '\n\n' +
+      'This command behavior affected by following config variables: ' + commandConfigUsage.join(', ') + '\n\n' +
       'For details run\n' +
       bold('$') + ' ra-protocol config set --help'
   }
