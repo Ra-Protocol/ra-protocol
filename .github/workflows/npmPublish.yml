@@ -1,15 +1,14 @@
-name: publish
-
 on:
-  release:
-    types: [released]
-  # support manual release in case something goes wrong and needs to be repeated or tested
-  workflow_dispatch:
+  workflow_call:
+    secrets:
+      NPM_TOKEN:
+        required: true
     inputs:
       tag:
-        description: tag that needs to publish
+        required: false
+        description: tag used to publish to npm
+        default: latest
         type: string
-        required: true
       sign:
         required: false
         description: signs the package using sf-release if set to true
@@ -37,11 +36,15 @@ on:
           Also requires a static ip runner (you can't use ubuntu-latest)
         type: boolean
         required: false
+      runsOn:
+        description: the runner.  Only needed if you need a non-public runner (ex, for git checkout from IP restricted private repo)
+        default: ubuntu-latest
+        required: false
+        type: string
       githubTag:
         description: the github release tag that you want to publish as an npm package
         required: true
         type: string
-
 jobs:
   check-publish:
     outputs:
@@ -69,7 +72,7 @@ jobs:
   npm-publish:
     needs: [check-publish, ctc-open]
     if: ${{ always() && needs.check-publish.outputs.published == 'false' }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runsOn }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -85,19 +88,19 @@ jobs:
       # when dryrun is true: publish with --dryrun flag
       - if: ${{ inputs.dryrun && !inputs.prerelease }}
         name: Release Dryrun
-        run: sf-release npm:package:release --githubtag ${{ github.event.release.tag_name || inputs.tag }} --dryrun --no-install --npmtag latest
+        run: sf-release npm:package:release --githubtag ${{ inputs.githubTag}} --dryrun --no-install --npmtag ${{ inputs.tag }}
         env:
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
         # when dryrun and prerelease is true: publish with --dryrun and --prerelease flags
       - if: ${{ inputs.dryrun && inputs.prerelease }}
         name: PreRelease Dryrun
-        run: sf-release npm:package:release --githubtag ${{ github.event.release.tag_name || inputs.tag }} --dryrun --no-install --npmtag latest --prerelease ${{ github.ref_name}}
+        run: sf-release npm:package:release --githubtag ${{ inputs.githubTag}} --dryrun --no-install --npmtag ${{ inputs.tag }} --prerelease ${{ github.ref_name}}
         env:
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
         # when dryrun is false and sign is true: sign and publish package
       - if: ${{ !inputs.dryrun && inputs.sign && !inputs.prerelease}}
         name: Sign and Release
-        run: sf-release npm:package:release --githubtag ${{ github.event.release.tag_name || inputs.tag }} --sign --no-install --npmtag latest
+        run: sf-release npm:package:release --githubtag ${{ inputs.githubTag}} --sign --no-install --npmtag ${{ inputs.tag }}
         env:
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
           AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
@@ -105,7 +108,7 @@ jobs:
         # when dryrun is false and sign is true and prerelease is true: sign and publish prerelease package
       - if: ${{ !inputs.dryrun && inputs.sign && inputs.prerelease}}
         name: Sign and PreRelease
-        run: sf-release npm:package:release --githubtag ${{ github.event.release.tag_name || inputs.tag }} --sign --no-install --npmtag latest --prerelease ${{ github.ref_name}}
+        run: sf-release npm:package:release --githubtag ${{ inputs.githubTag}} --sign --no-install --npmtag ${{ inputs.tag }} --prerelease ${{ github.ref_name}}
         env:
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
           AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
@@ -113,13 +116,13 @@ jobs:
         # when dryrun is false and sign is false: publish package
       - if: ${{ !inputs.dryrun && !inputs.sign && !inputs.prerelease}}
         name: Release
-        run: sf-release npm:package:release --githubtag ${{ github.event.release.tag_name || inputs.tag }} --no-install --npmtag latest
+        run: sf-release npm:package:release --githubtag ${{ inputs.githubTag}} --no-install --npmtag ${{ inputs.tag }}
         env:
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
         # when dryrun is false and sign is false and prerelease is true: publish prerelease package
       - if: ${{ !inputs.sign && !inputs.dryrun && inputs.prerelease }}
         name: PreRelease
-        run: sf-release npm:package:release --githubtag ${{ github.event.release.tag_name || inputs.tag }} --no-install --npmtag latest --prerelease ${{ github.ref_name}}
+        run: sf-release npm:package:release --githubtag ${{ inputs.githubTag}} --no-install --npmtag ${{ inputs.tag }} --prerelease ${{ github.ref_name}}
         env:
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
 
