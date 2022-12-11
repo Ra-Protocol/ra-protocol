@@ -20,7 +20,7 @@ $ npm install -g ra-protocol
 $ ra-protocol COMMAND
 running command...
 $ ra-protocol (--version)
-ra-protocol/0.2.0 darwin-x64 node-v14.18.1
+ra-protocol/0.3.0 darwin-x64 node-v14.18.1
 $ ra-protocol --help [COMMAND]
 USAGE
   $ ra-protocol COMMAND
@@ -46,10 +46,10 @@ Check the amount of liquidity currently flashable for a certain asset on a certa
 
 ```
 USAGE
-  $ ra-protocol check-flashable -c ethereum|bsc|avalanche|solana [-a <value>]
+  $ ra-protocol check-flashable -c ethereum|bsc|avalanche|solana -a <value>
 
 FLAGS
-  -a, --asset=<value>                          specify asset (Optional)
+  -a, --asset=<value>...                       (required) specify asset
   -c, --chain=(ethereum|bsc|avalanche|solana)  (required) specify which chain
 
 DESCRIPTION
@@ -60,9 +60,9 @@ EXAMPLES
   Checking is complete
 
 FLAG DESCRIPTIONS
-  -a, --asset=<value>  
+  -a, --asset=<value>...  
 
-    specify asset (Optional)
+    specify asset
 
   -c, --chain=(ethereum|bsc|avalanche|solana)
 
@@ -72,13 +72,13 @@ FLAG DESCRIPTIONS
         solana: Solana
 
 CONFIG USAGE
-  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy, tenderly-key, tenderly-user, tenderly-project
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
 
   For details run
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/check-flashable/index.ts)_
+_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/check-flashable/index.ts)_
 
 ## `ra-protocol check-most-liquid-flash`
 
@@ -86,10 +86,10 @@ Checks all connected chains for the most liquid network available to flash loan 
 
 ```
 USAGE
-  $ ra-protocol check-most-liquid-flash -c ethereum|bsc|avalanche|solana [-a <value>]
+  $ ra-protocol check-most-liquid-flash -c ethereum|bsc|avalanche|solana -a <value>
 
 FLAGS
-  -a, --asset=<value>                          specify asset (Optional)
+  -a, --asset=<value>...                       (required) specify asset
   -c, --chain=(ethereum|bsc|avalanche|solana)  (required) specify which chain
 
 DESCRIPTION
@@ -100,9 +100,9 @@ EXAMPLES
   Checking is complete
 
 FLAG DESCRIPTIONS
-  -a, --asset=<value>  
+  -a, --asset=<value>...  
 
-    specify asset (Optional)
+    specify asset
 
   -c, --chain=(ethereum|bsc|avalanche|solana)
 
@@ -112,13 +112,13 @@ FLAG DESCRIPTIONS
         solana: Solana
 
 CONFIG USAGE
-  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy, tenderly-key, tenderly-user, tenderly-project
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
 
   For details run
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/check-most-liquid-flash/index.ts)_
+_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/check-most-liquid-flash/index.ts)_
 
 ## `ra-protocol compile`
 
@@ -144,13 +144,13 @@ FLAG DESCRIPTIONS
     The compiler ID being called (Should be set in the ra.config.js file)
 
 CONFIG USAGE
-  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy, tenderly-key, tenderly-user, tenderly-project
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
 
   For details run
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/compile/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/compile/index.ts)_
+_See code: [dist/commands/compile/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/compile/index.ts)_
 
 ## `ra-protocol config`
 
@@ -164,7 +164,7 @@ DESCRIPTION
   Get/Set configuration
 ```
 
-_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/config/index.ts)_
+_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/config/index.ts)_
 
 ## `ra-protocol config get`
 
@@ -283,13 +283,13 @@ FLAG DESCRIPTIONS
         this: From the same contract
 
 CONFIG USAGE
-  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy, tenderly-key, tenderly-user, tenderly-project
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
 
   For details run
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/deploy/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/deploy/index.ts)_
+_See code: [dist/commands/deploy/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/deploy/index.ts)_
 
 ## `ra-protocol help [COMMAND]`
 
@@ -314,7 +314,7 @@ FLAG DESCRIPTIONS
     Include all nested commands in the output.
 
 CONFIG USAGE
-  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy, tenderly-key, tenderly-user, tenderly-project
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
 
   For details run
   $ ra-protocol config set --help
@@ -329,26 +329,52 @@ Easiest, quickest option to get a flash loan up and running
 ```
 USAGE
   $ ra-protocol quickflash -c ethereum|bsc|avalanche|solana -t
-    arb|liquidate|collateral-swap|eipfl|multiasset|custom
+    arb|liquidate|collateral-swap|eipfl|multiasset|custom -a <value> [-m] [-v <value>]
 
 FLAGS
+  -a, --asset=<value>...                                              (required) specify asset
   -c, --chain=(ethereum|bsc|avalanche|solana)                         (required) specify which chain
+  -m, --mainnet                                                       specify to run on mainnet
   -t, --type=(arb|liquidate|collateral-swap|eipfl|multiasset|custom)  (required) Specify the type of flash loan preset
+  -v, --value=<value>                                                 specify value
 
 DESCRIPTION
   Easiest, quickest option to get a flash loan up and running
 
 EXAMPLES
-  $ ra-protocol quickflash --compiler 0.8.0
+  $ ra-protocol quickflash --chain avalanche --type arb --asset DAI --asset USDC --value 1000000000000000000
+  Paste private key of wallet you want to run quickflash from: ****************************************************************
+  {
+    contract: {
+      address: '0xDD70A6B85bbfA9b8e36e77C0ce9ddBcba2De870A',
+      explore: 'https://testnet.snowtrace.io/address/0xDD70A6B85bbfA9b8e36e77C0ce9ddBcba2De870A'
+    },
+    setTokenAddresses: {
+      transactionHash: '0x0a0fd41c649dd8581a07954a352c50eb201e8c5f7f0994a71cf81bab445c8382',
+      explore: 'https://testnet.snowtrace.io/tx/0x0a0fd41c649dd8581a07954a352c50eb201e8c5f7f0994a71cf81bab445c8382'
+    },
+    flashloan: {
+      transactionHash: '0x5b489dbda79fb1a7a5d449cf973ee62ce6e3555836a68651b9a65771735ba501',
+      explore: 'https://testnet.snowtrace.io/tx/0x5b489dbda79fb1a7a5d449cf973ee62ce6e3555836a68651b9a65771735ba501'
+    }
+  }
   Flashloan is complete
 
 FLAG DESCRIPTIONS
+  -a, --asset=<value>...  
+
+    specify asset
+
   -c, --chain=(ethereum|bsc|avalanche|solana)
 
         ethereum: Ethereum
         bsc: Binance Smart Chain
         avalanche: Avalanche
         solana: Solana
+
+  -m, --mainnet  
+
+    specify to run on mainnet
 
   -t, --type=(arb|liquidate|collateral-swap|eipfl|multiasset|custom)
 
@@ -371,14 +397,18 @@ FLAG DESCRIPTIONS
 
         custom: Custom logic
 
+  -v, --value=<value>  
+
+    specify value
+
 CONFIG USAGE
-  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy, tenderly-key, tenderly-user, tenderly-project
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
 
   For details run
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/quickflash/index.ts)_
+_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/quickflash/index.ts)_
 
 ## `ra-protocol simulate`
 
@@ -427,5 +457,5 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/simulate/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.2.0/dist/commands/simulate/index.ts)_
+_See code: [dist/commands/simulate/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/simulate/index.ts)_
 <!-- commandsstop -->
