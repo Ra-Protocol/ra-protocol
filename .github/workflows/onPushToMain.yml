@@ -7,12 +7,39 @@ on:
 
 jobs:
   release:
-    uses: oclif/github-workflows/.github/workflows/githubRelease.yml@main
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.SVC_CLI_BOT_GITHUB_TOKEN }}
 
-  # most repos won't use this
-  # depends on previous job to avoid git collisions, not for any functionality reason
-  # docs:
-  #   uses: salesforcecli/github-workflows/.github/workflows/publishTypedoc.yml@main
-  #   secrets: inherit
-  #   needs: release
+      - uses: oclif/github-workflows/.github/actions/getPreReleaseTag@main
+        id: distTag
+        if: inputs.prerelease
+
+      - name: prerelease package.json validation
+        if: inputs.prerelease && !steps.distTag.outputs.tag
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Prerelease requires a dist tag name in your package.json like beta in 1.1.1-beta.0')
+
+      - name: Conventional Changelog Action
+        id: changelog
+        uses: salesforcecli/conventional-changelog-action@prereleases
+        with:
+          git-user-name: svc-cli-bot
+          git-user-email: svc_cli_bot@salesforce.com
+          github-token: ${{ secrets.SVC_CLI_BOT_GITHUB_TOKEN }}
+          output-file: "false"
+          tag-prefix: ""
+      - name: Create Github Release
+        uses: actions/create-release@v1
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.SVC_CLI_BOT_GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
+          prerelease: ${{ inputs.prerelease }}
