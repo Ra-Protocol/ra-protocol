@@ -42,6 +42,7 @@ Flashloan is complete
     const params = {
       key: key,
       chain: flags.chain,
+      'protocol-aave': this.globalFlags['protocol-aave'],
       assets: assets,
       value: flags.value,
     }
