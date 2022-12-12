@@ -38,9 +38,17 @@ Flashloan is complete
   async run(): Promise<void> {
     const {flags} = await this.parse(Quickflash)
     const assets = flags.asset?.join(',')
-    const mainnet = flags.mainnet ? '&mainnet=true' : ''
     const key = await CliUx.ux.prompt('Paste private key of wallet you want to run quickflash from', {type: 'hide'})
-    const response = await axios.get(`${this.apiUrl}/quickflash?key=${key}&chain=${flags.chain}${mainnet}&assets=${assets}&value=${flags.value}`).catch(this.processApiError)
+    const params = {
+      key: key,
+      chain: flags.chain,
+      assets: assets,
+      value: flags.value,
+    }
+    const url = new URL(this.apiUrl + '/quickflash')
+    url.search = new URLSearchParams((flags.mainnet ? {...params, mainnet: true} : params) as keyof unknown).toString()
+
+    const response = await axios.get(url.href).catch(this.processApiError)
     if (response) {
       this.log(response.data)
     }
