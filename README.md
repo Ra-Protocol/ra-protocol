@@ -20,7 +20,7 @@ $ npm install -g ra-protocol
 $ ra-protocol COMMAND
 running command...
 $ ra-protocol (--version)
-ra-protocol/0.3.0 darwin-x64 node-v14.18.1
+ra-protocol/0.4.0 darwin-x64 node-v14.18.1
 $ ra-protocol --help [COMMAND]
 USAGE
   $ ra-protocol COMMAND
@@ -78,7 +78,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/check-flashable/index.ts)_
+_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/check-flashable/index.ts)_
 
 ## `ra-protocol check-most-liquid-flash`
 
@@ -118,7 +118,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/check-most-liquid-flash/index.ts)_
+_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/check-most-liquid-flash/index.ts)_
 
 ## `ra-protocol compile`
 
@@ -150,7 +150,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/compile/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/compile/index.ts)_
+_See code: [dist/commands/compile/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/compile/index.ts)_
 
 ## `ra-protocol config`
 
@@ -164,7 +164,7 @@ DESCRIPTION
   Get/Set configuration
 ```
 
-_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/config/index.ts)_
+_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/config/index.ts)_
 
 ## `ra-protocol config get`
 
@@ -289,7 +289,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/deploy/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/deploy/index.ts)_
+_See code: [dist/commands/deploy/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/deploy/index.ts)_
 
 ## `ra-protocol help [COMMAND]`
 
@@ -408,7 +408,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/quickflash/index.ts)_
+_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/quickflash/index.ts)_
 
 ## `ra-protocol simulate`
 
@@ -457,5 +457,5 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/simulate/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.3.0/dist/commands/simulate/index.ts)_
+_See code: [dist/commands/simulate/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/simulate/index.ts)_
 <!-- commandsstop -->
