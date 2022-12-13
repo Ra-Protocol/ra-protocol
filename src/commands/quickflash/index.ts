@@ -38,9 +38,9 @@ Flashloan is complete
   async run(): Promise<void> {
     const {flags} = await this.parse(Quickflash)
     const assets = flags.asset?.join(',')
-    const key = await CliUx.ux.prompt('Paste private key of wallet you want to run quickflash from', {type: 'hide'})
+    const walletKey = await CliUx.ux.prompt('Paste private key of wallet you want to run quickflash from', {type: 'hide'})
     const params = {
-      key: key,
+      walletKey: walletKey,
       chain: flags.chain,
       'protocol-aave': this.globalFlags['protocol-aave'],
       assets: assets,
