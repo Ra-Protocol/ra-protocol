@@ -20,7 +20,7 @@ $ npm install -g ra-protocol
 $ ra-protocol COMMAND
 running command...
 $ ra-protocol (--version)
-ra-protocol/0.4.0 darwin-x64 node-v14.18.1
+ra-protocol/0.5.0 darwin-x64 node-v14.18.1
 $ ra-protocol --help [COMMAND]
 USAGE
   $ ra-protocol COMMAND
@@ -78,7 +78,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/check-flashable/index.ts)_
+_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/check-flashable/index.ts)_
 
 ## `ra-protocol check-most-liquid-flash`
 
@@ -118,7 +118,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/check-most-liquid-flash/index.ts)_
+_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/check-most-liquid-flash/index.ts)_
 
 ## `ra-protocol compile`
 
@@ -150,7 +150,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/compile/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/compile/index.ts)_
+_See code: [dist/commands/compile/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/compile/index.ts)_
 
 ## `ra-protocol config`
 
@@ -164,7 +164,7 @@ DESCRIPTION
   Get/Set configuration
 ```
 
-_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/config/index.ts)_
+_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/config/index.ts)_
 
 ## `ra-protocol config get`
 
@@ -194,13 +194,14 @@ Updates configuration
 
 ```
 USAGE
-  $ ra-protocol config set [--protocol-aave v2|v3] [--protocol-uni v2|v3] [--privacy pub|secret] [--tenderly-key
-    <value>] [--tenderly-user <value>] [--tenderly-project <value>]
+  $ ra-protocol config set [--protocol-aave v2|v3] [--protocol-uni v2|v3] [--privacy pub|secret] [--ra-key
+    <value>] [--tenderly-key <value>] [--tenderly-user <value>] [--tenderly-project <value>]
 
 FLAGS
   --privacy=(pub|secret)      Transaction visiblity in the mempool
   --protocol-aave=(v2|v3)     Flash Loan protocol
   --protocol-uni=(v2|v3)      DEX protocol
+  --ra-key=<value>            RA_API_KEY - generate at https://ra.xyz
   --tenderly-key=<value>      TENDERLY_ACCESS_KEY - generate at https://dashboard.tenderly.co/account/authorization
   --tenderly-project=<value>  TENDERLY_PROJECT - generate at https://dashboard.tenderly.co/projects/create or get from
                               https://dashboard.tenderly.co/projects
@@ -214,6 +215,7 @@ EXAMPLES
     protocol-aave: v3
     protocol-uni: v2
     privacy: secret
+    ra-key: d41d8cd98f00b204e9800998ecf8427e
     tenderly-key: 4EFyPxPtcoyB4BFNAypscds2yI8mZGzM
     tenderly-user: cinderella
     tenderly-project: to-the-moon
@@ -234,6 +236,10 @@ FLAG DESCRIPTIONS
 
         v2: the standard generally used across all swap routers (Uniswap, Trader Joe, etc)
         v3: discrepancies between other routers as most are identical to UniswapV2
+
+  --ra-key=<value>  
+
+    RA_API_KEY - generate at https://ra.xyz
 
   --tenderly-key=<value>  
 
@@ -289,7 +295,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/deploy/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/deploy/index.ts)_
+_See code: [dist/commands/deploy/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/deploy/index.ts)_
 
 ## `ra-protocol help [COMMAND]`
 
@@ -408,7 +414,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/quickflash/index.ts)_
+_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/quickflash/index.ts)_
 
 ## `ra-protocol simulate`
 
@@ -457,5 +463,5 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/simulate/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.4.0/dist/commands/simulate/index.ts)_
+_See code: [dist/commands/simulate/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/simulate/index.ts)_
 <!-- commandsstop -->
