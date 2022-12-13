@@ -20,7 +20,7 @@ $ npm install -g ra-protocol
 $ ra-protocol COMMAND
 running command...
 $ ra-protocol (--version)
-ra-protocol/0.5.0 darwin-x64 node-v14.18.1
+ra-protocol/0.6.0 darwin-x64 node-v14.18.1
 $ ra-protocol --help [COMMAND]
 USAGE
   $ ra-protocol COMMAND
@@ -35,6 +35,7 @@ USAGE
 * [`ra-protocol config`](#ra-protocol-config)
 * [`ra-protocol config get`](#ra-protocol-config-get)
 * [`ra-protocol config set`](#ra-protocol-config-set)
+* [`ra-protocol config update-private-key`](#ra-protocol-config-update-private-key)
 * [`ra-protocol deploy`](#ra-protocol-deploy)
 * [`ra-protocol help [COMMAND]`](#ra-protocol-help-command)
 * [`ra-protocol quickflash`](#ra-protocol-quickflash)
@@ -78,7 +79,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/check-flashable/index.ts)_
+_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.6.0/dist/commands/check-flashable/index.ts)_
 
 ## `ra-protocol check-most-liquid-flash`
 
@@ -118,7 +119,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/check-most-liquid-flash/index.ts)_
+_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.6.0/dist/commands/check-most-liquid-flash/index.ts)_
 
 ## `ra-protocol compile`
 
@@ -150,7 +151,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/compile/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/compile/index.ts)_
+_See code: [dist/commands/compile/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.6.0/dist/commands/compile/index.ts)_
 
 ## `ra-protocol config`
 
@@ -164,7 +165,7 @@ DESCRIPTION
   Get/Set configuration
 ```
 
-_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/config/index.ts)_
+_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.6.0/dist/commands/config/index.ts)_
 
 ## `ra-protocol config get`
 
@@ -255,6 +256,29 @@ FLAG DESCRIPTIONS
     TENDERLY_USER - get from https://dashboard.tenderly.co/account
 ```
 
+## `ra-protocol config update-private-key`
+
+Updates wallet private key (stored in macOS keychain)
+
+```
+USAGE
+  $ ra-protocol config update-private-key
+
+DESCRIPTION
+  Updates wallet private key (stored in macOS keychain)
+
+EXAMPLES
+  $ ra-protocol config update-private-key
+    Paste private key of wallet you want to use with ra-protocol: ****************************************************************
+  Wallet private key updated
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
+
+  For details run
+  $ ra-protocol config set --help
+```
+
 ## `ra-protocol deploy`
 
 Deploy a contract that has been compiled
@@ -295,7 +319,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/deploy/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/deploy/index.ts)_
+_See code: [dist/commands/deploy/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.6.0/dist/commands/deploy/index.ts)_
 
 ## `ra-protocol help [COMMAND]`
 
@@ -414,7 +438,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/quickflash/index.ts)_
+_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.6.0/dist/commands/quickflash/index.ts)_
 
 ## `ra-protocol simulate`
 
@@ -463,5 +487,5 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/simulate/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.5.0/dist/commands/simulate/index.ts)_
+_See code: [dist/commands/simulate/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.6.0/dist/commands/simulate/index.ts)_
 <!-- commandsstop -->
