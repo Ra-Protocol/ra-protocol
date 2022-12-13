@@ -40,6 +40,7 @@ Flashloan is complete
     const assets = flags.asset?.join(',')
     const walletKey = await CliUx.ux.prompt('Paste private key of wallet you want to run quickflash from', {type: 'hide'})
     const params = {
+      raApiKey: this.globalFlags['ra-key'],
       walletKey: walletKey,
       chain: flags.chain,
       'protocol-aave': this.globalFlags['protocol-aave'],

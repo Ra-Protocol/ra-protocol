@@ -11,6 +11,7 @@ export default class ConfigSet extends BaseCommand<any> {
   protocol-aave: v3
   protocol-uni: v2
   privacy: secret
+  ra-key: d41d8cd98f00b204e9800998ecf8427e
   tenderly-key: 4EFyPxPtcoyB4BFNAypscds2yI8mZGzM
   tenderly-user: cinderella
   tenderly-project: to-the-moon
@@ -29,6 +30,7 @@ Configuration updated
         'protocol-aave',
         'protocol-uni',
         'privacy',
+        'ra-key',
         'tenderly-key',
         'tenderly-user',
         'tenderly-project',
@@ -47,6 +49,9 @@ Configuration updated
         'pub',
         'secret',
       ],
+    }),
+    'ra-key': Flags.string({
+      description: 'RA_API_KEY - generate at https://ra.xyz',
     }),
     'tenderly-key': Flags.string({
       description: 'TENDERLY_ACCESS_KEY - generate at https://dashboard.tenderly.co/account/authorization',
