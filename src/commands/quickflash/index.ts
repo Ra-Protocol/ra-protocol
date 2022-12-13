@@ -1,6 +1,6 @@
 import {BaseCommand} from '../../baseCommand'
+import getWalletKey from '../../lib/wallet-key'
 import {asset, chain, mainnet, type, value} from '../../flags'
-import {CliUx} from '@oclif/core'
 import axios from 'axios'
 
 export default class Quickflash extends BaseCommand<any> {
@@ -38,7 +38,7 @@ Flashloan is complete
   async run(): Promise<void> {
     const {flags} = await this.parse(Quickflash)
     const assets = flags.asset?.join(',')
-    const walletKey = await CliUx.ux.prompt('Paste private key of wallet you want to run quickflash from', {type: 'hide'})
+    const walletKey = await getWalletKey()
     const params = {
       raApiKey: this.globalFlags['ra-key'],
       walletKey: walletKey,
