@@ -1,8 +1,5 @@
 import {BaseCommand} from '../../baseCommand'
 import {Flags} from '@oclif/core'
-import * as path from 'path'
-import * as fse from 'fs-extra'
-import {saveConfig} from '../../lib/storage'
 
 export default class ConfigSet extends BaseCommand<any> {
   static description = 'Updates configuration'

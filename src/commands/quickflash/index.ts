@@ -1,7 +1,8 @@
 import {BaseCommand} from '../../baseCommand'
 import getWalletKey from '../../lib/wallet-key'
-import {asset, chain, mainnet, type, value} from '../../flags'
+import {asset, chain, mainnet, redeploy, type, value} from '../../flags'
 import axios from 'axios'
+import * as _ from 'lodash'
 
 export default class Quickflash extends BaseCommand<any> {
   static description = 'Easiest, quickest option to get a flash loan up and running'
@@ -30,6 +31,7 @@ Flashloan is complete
   static flags = {
     chain,
     mainnet,
+    redeploy,
     type,
     asset,
     value,
@@ -39,7 +41,9 @@ Flashloan is complete
     const {flags} = await this.parse(Quickflash)
     const assets = flags.asset?.join(',')
     const walletKey = await getWalletKey()
-    const params = {
+    const params: {
+      [key: string]: any,
+    } = {
       raApiKey: this.globalFlags['ra-key'],
       walletKey: walletKey,
       chain: flags.chain,
@@ -47,15 +51,33 @@ Flashloan is complete
       assets,
       value: flags.value,
     }
+    const contractAddress = _.get(this.storage, `contract.${flags.chain}.aave-${this.globalFlags['protocol-aave']}.uni-${this.globalFlags['protocol-uni']}`)
+
+    if (contractAddress) {
+      params.contractAddress = contractAddress
+    }
+
+    if (flags.mainnet) {
+      params.mainnet = true
+    }
+
+    if (flags.redeploy) {
+      params.redeploy = true
+    }
+
     const url = new URL(this.apiUrl + '/quickflash')
-    url.search = new URLSearchParams((flags.mainnet ? {...params, mainnet: true} : params) as keyof unknown).toString()
+    url.search = new URLSearchParams(params as keyof unknown).toString()
 
     const response = await axios.get(url.href).catch(this.processApiError) as any
+    if (response.data && response.data.contract) {
+      _.set(this.storage, `contract.${flags.chain}.aave-${this.globalFlags['protocol-aave']}.uni-${this.globalFlags['protocol-uni']}`, response.data.contract.address)
+      this.saveStorage()
+    }
     if (response) {
       this.log(response.data)
     }
 
-    if (!this.gotError) {
+    if (!this.gotError && !(response.data && response.data.flashloan && !response.data.flashloan.error)) {
       this.log('Flashloan is complete')
     }
   }

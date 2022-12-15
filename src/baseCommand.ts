@@ -9,11 +9,27 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
 
   protected globalFlags: any
 
+  protected storage: any
+
   protected gotError = false
 
   protected flags!: Flags<T>
 
+  protected storageFilename = path.join(this.config.configDir, 'storage.json')
+
   protected configFilename = path.join(this.config.configDir, 'config.json')
+
+  protected saveStorage = () => {
+    fse.writeJSONSync(this.storageFilename, this.storage)
+  }
+
+  protected readStorage: any = () => {
+    if (!fse.existsSync(this.storageFilename)) {
+      fse.outputFileSync(this.storageFilename, JSON.stringify({}))
+    }
+
+    return fse.readJSONSync(this.storageFilename)
+  }
 
   protected saveConfig = () => {
     fse.writeJSONSync(this.configFilename, this.globalFlags)
@@ -56,6 +72,7 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
 
   public async init(): Promise<void> {
     this.globalFlags = this.readConfig()
+    this.storage = this.readStorage()
     await super.init()
   }
 }
