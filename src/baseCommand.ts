@@ -13,6 +13,25 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
 
   protected flags!: Flags<T>
 
+  protected configFilename = path.join(this.config.configDir, 'config.json')
+
+  protected saveConfig = () => {
+    fse.writeJSONSync(this.configFilename, this.globalFlags)
+  }
+
+  protected readConfig: any = () => {
+    if (!fse.existsSync(this.configFilename)) {
+      fse.outputFileSync(this.configFilename, JSON.stringify({
+        'api-url': 'https://ra-protocol-api.vercel.app/api',
+        'protocol-aave': 'v3',
+        'protocol-uni': 'v2',
+        privacy: 'pub',
+      }))
+    }
+
+    return fse.readJSONSync(this.configFilename)
+  }
+
   protected processApiError = (error: any) => {
     this.gotError = true
     if (error.response) {
@@ -36,15 +55,7 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
   }
 
   public async init(): Promise<void> {
-    const configFilename = path.join(this.config.configDir, 'config.json')
-    if (!fse.existsSync(configFilename)) {
-      fse.outputFileSync(configFilename, JSON.stringify({
-        'protocol-aave': 'v3',
-        'protocol-uni': 'v2',
-        privacy: 'pub',
-      }))
-    }
-    this.globalFlags = fse.readJSONSync(configFilename)
+    this.globalFlags = this.readConfig()
     await super.init()
   }
 }

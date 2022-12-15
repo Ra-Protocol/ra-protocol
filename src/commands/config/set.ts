@@ -2,6 +2,7 @@ import {BaseCommand} from '../../baseCommand'
 import {Flags} from '@oclif/core'
 import * as path from 'path'
 import * as fse from 'fs-extra'
+import {saveConfig} from '../../lib/storage'
 
 export default class ConfigSet extends BaseCommand<any> {
   static description = 'Updates configuration'
@@ -65,7 +66,6 @@ Configuration updated
   }
 
   async run(): Promise<void> {
-    const configFilename = path.join(this.config.configDir, 'config.json')
     const {flags} = await this.parse(ConfigSet)
     const key = Object.keys(flags)[0]
     let changed = false
@@ -78,7 +78,7 @@ Configuration updated
       }
       this.log(`  ${key}: ${this.globalFlags[key] || '<unset>'}`)
     }
-    fse.writeJSON(configFilename, this.globalFlags)
+    this.saveConfig()
     if (changed) {
       this.log('Configuration updated')
     } else {
