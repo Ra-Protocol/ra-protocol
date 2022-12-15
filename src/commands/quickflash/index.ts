@@ -28,11 +28,11 @@ Flashloan is complete
   ]
 
   static flags = {
-    chain: chain,
-    mainnet: mainnet,
-    type: type,
-    asset: asset,
-    value: value,
+    chain,
+    mainnet,
+    type,
+    asset,
+    value,
   }
 
   async run(): Promise<void> {
@@ -44,13 +44,13 @@ Flashloan is complete
       walletKey: walletKey,
       chain: flags.chain,
       'protocol-aave': this.globalFlags['protocol-aave'],
-      assets: assets,
+      assets,
       value: flags.value,
     }
     const url = new URL(this.apiUrl + '/quickflash')
     url.search = new URLSearchParams((flags.mainnet ? {...params, mainnet: true} : params) as keyof unknown).toString()
 
-    const response = await axios.get(url.href).catch(this.processApiError)
+    const response = await axios.get(url.href).catch(this.processApiError) as any
     if (response) {
       this.log(response.data)
     }
