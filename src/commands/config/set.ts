@@ -29,6 +29,7 @@ Configuration updated
         'protocol-uni',
         'privacy',
         'ra-key',
+        'simulate',
         'tenderly-key',
         'tenderly-user',
         'tenderly-project',
@@ -48,6 +49,13 @@ Configuration updated
         'secret',
       ],
     }),
+    simulate: Flags.enum({
+      description: 'Only execute flash loan transaction if tenderly simulation is successful',
+      options: [
+        'on',
+        'off',
+      ],
+    }),
     'ra-key': Flags.string({
       description: 'RA_API_KEY - generate at https://ra.xyz',
     }),
@@ -65,16 +73,34 @@ Configuration updated
   async run(): Promise<void> {
     const {flags} = await this.parse(ConfigSet)
     const key = Object.keys(flags)[0]
+    if (key === 'simulate') {
+      const bold = (text: string) => '\u001B[1m' + text + '\u001B[0m'
+      if (!this.globalFlags['tenderly-key']) {
+        this.error(`simulation requires setting tenderly key, run ${bold('ra-protocol set config --help')} for details`)
+      }
+
+      if (!this.globalFlags['tenderly-user']) {
+        this.error(`simulation requires setting tenderly user, run ${bold('ra-protocol set config --help')} for details`)
+      }
+
+      if (!this.globalFlags['tenderly-project']) {
+        this.error(`simulation requires setting tenderly project, run ${bold('ra-protocol set config --help')} for details`)
+      }
+    }
+
     let changed = false
     for (const key in ConfigSet.flags) {
       if (flags[key]) {
         if (this.globalFlags[key] !== flags[key]) {
           changed = true
         }
+
         this.globalFlags[key] = flags[key]
       }
+
       this.log(`  ${key}: ${this.globalFlags[key] || '<unset>'}`)
     }
+
     this.saveConfig()
     if (changed) {
       this.log('Configuration updated')

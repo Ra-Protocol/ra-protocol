@@ -65,6 +65,25 @@ Flashloan is complete
       params.redeploy = true
     }
 
+    if (this.globalFlags.simulate === 'on') {
+      const bold = (text: string) => '\u001B[1m' + text + '\u001B[0m'
+      if (!this.globalFlags['tenderly-key']) {
+        this.error(`simulation requires setting tenderly key, run ${bold('ra-protocol set config --help')} for details`)
+      }
+
+      if (!this.globalFlags['tenderly-user']) {
+        this.error(`simulation requires setting tenderly user, run ${bold('ra-protocol set config --help')} for details`)
+      }
+
+      if (!this.globalFlags['tenderly-project']) {
+        this.error(`simulation requires setting tenderly project, run ${bold('ra-protocol set config --help')} for details`)
+      }
+
+      params.tenderlyKey = this.globalFlags['tenderly-key']
+      params.tenderlyUser = this.globalFlags['tenderly-user']
+      params.tenderlyProject = this.globalFlags['tenderly-project']
+    }
+
     const url = new URL(this.apiUrl + '/quickflash')
     url.search = new URLSearchParams(params as keyof unknown).toString()
 
@@ -73,6 +92,7 @@ Flashloan is complete
       _.set(this.storage, `contract.${flags.chain}.aave-${this.globalFlags['protocol-aave']}.uni-${this.globalFlags['protocol-uni']}`, response.data.contract.address)
       this.saveStorage()
     }
+
     if (response) {
       this.log(response.data)
     }

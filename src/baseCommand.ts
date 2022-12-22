@@ -42,6 +42,7 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
         'protocol-aave': 'v3',
         'protocol-uni': 'v2',
         privacy: 'pub',
+        simulate: 'off',
       }))
     }
 
