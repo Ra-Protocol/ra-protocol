@@ -38,7 +38,7 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
   protected readConfig: any = () => {
     if (!fse.existsSync(this.configFilename)) {
       fse.outputFileSync(this.configFilename, JSON.stringify({
-        'api-url': 'https://ra-protocol-api.vercel.app/api',
+        'api-url': 'https://api.ra.xyz/api',
         'protocol-aave': 'v3',
         'protocol-uni': 'v2',
         privacy: 'pub',
