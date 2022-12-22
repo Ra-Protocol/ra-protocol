@@ -4,10 +4,9 @@ ra-protocol
 RA Protocol CLI
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/oclif-hello-world.svg)](https://npmjs.org/package/ra-protocol)
-[![CircleCI](https://circleci.com/gh/oclif/hello-world/tree/main.svg?style=shield)](https://circleci.com/gh/Ra-Protocol/ra-protocol/tree/main)
-[![Downloads/week](https://img.shields.io/npm/dw/oclif-hello-world.svg)](https://npmjs.org/package/ra-protocol)
-[![License](https://img.shields.io/npm/l/oclif-hello-world.svg)](https://github.com/Ra-Protocol/ra-protocol/blob/main/package.json)
+[![Version](https://img.shields.io/npm/v/ra-protocol.svg)](https://npmjs.org/package/ra-protocol)
+[![Downloads/week](https://img.shields.io/npm/dw/ra-protocol.svg)](https://npmjs.org/package/ra-protocol)
+[![License](https://img.shields.io/npm/l/ra-protocol.svg)](https://github.com/Ra-Protocol/ra-protocol/blob/main/package.json)
 
 <!-- toc -->
 * [Usage](#usage)
