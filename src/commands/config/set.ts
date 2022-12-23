@@ -10,6 +10,7 @@ export default class ConfigSet extends BaseCommand<any> {
   protocol-uni: v2
   privacy: secret
   ra-key: d41d8cd98f00b204e9800998ecf8427e
+  simulate: on
   tenderly-key: 4EFyPxPtcoyB4BFNAypscds2yI8mZGzM
   tenderly-user: cinderella
   tenderly-project: to-the-moon

@@ -10,6 +10,8 @@ Current configuration:
   protocol-aave: v3
   protocol-uni: v2
   privacy: pub
+  ra-key: d41d8cd98f00b204e9800998ecf8427e
+  simulate: on
   tenderly-key: 4EFyPxPtcoyB4BFNAypscds2yI8mZGzM
   tenderly-user: cinderella
   tenderly-project: to-the-moon
