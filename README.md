@@ -19,7 +19,7 @@ $ npm install -g ra-protocol
 $ ra-protocol COMMAND
 running command...
 $ ra-protocol (--version)
-ra-protocol/0.8.0 darwin-x64 node-v14.21.2
+ra-protocol/0.9.0 darwin-x64 node-v14.21.2
 $ ra-protocol --help [COMMAND]
 USAGE
   $ ra-protocol COMMAND
@@ -75,7 +75,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.8.0/dist/commands/check-flashable/index.ts)_
+_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.9.0/dist/commands/check-flashable/index.ts)_
 
 ## `ra-protocol check-most-liquid-flash`
 
@@ -115,7 +115,7 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.8.0/dist/commands/check-most-liquid-flash/index.ts)_
+_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.9.0/dist/commands/check-most-liquid-flash/index.ts)_
 
 ## `ra-protocol config`
 
@@ -129,7 +129,7 @@ DESCRIPTION
   Get/Set configuration
 ```
 
-_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.8.0/dist/commands/config/index.ts)_
+_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.9.0/dist/commands/config/index.ts)_
 
 ## `ra-protocol config get`
 
@@ -148,6 +148,8 @@ EXAMPLES
     protocol-aave: v3
     protocol-uni: v2
     privacy: pub
+    ra-key: d41d8cd98f00b204e9800998ecf8427e
+    simulate: on
     tenderly-key: 4EFyPxPtcoyB4BFNAypscds2yI8mZGzM
     tenderly-user: cinderella
     tenderly-project: to-the-moon
@@ -182,6 +184,7 @@ EXAMPLES
     protocol-uni: v2
     privacy: secret
     ra-key: d41d8cd98f00b204e9800998ecf8427e
+    simulate: on
     tenderly-key: 4EFyPxPtcoyB4BFNAypscds2yI8mZGzM
     tenderly-user: cinderella
     tenderly-project: to-the-moon
@@ -371,5 +374,5 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.8.0/dist/commands/quickflash/index.ts)_
+_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.9.0/dist/commands/quickflash/index.ts)_
 <!-- commandsstop -->
