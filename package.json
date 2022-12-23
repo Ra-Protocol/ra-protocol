@@ -22,6 +22,7 @@
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.1.6",
     "axios": "^1.2.1",
+    "enquirer": "^2.3.6",
     "fs-extra": "^10.1.0",
     "keychain": "^1.3.0",
     "lodash": "^4.17.21"

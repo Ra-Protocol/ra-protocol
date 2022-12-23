@@ -1,6 +1,8 @@
 import {Command, Flags, Interfaces} from '@oclif/core'
 import * as fse from 'fs-extra'
 import path = require('path')
+const {prompt, Select} = require('enquirer')
+import axios from 'axios'
 
 export type Flags<T extends typeof Command> = Interfaces.InferredFlags<typeof BaseCommand['globalFlags'] & T['flags']>
 
@@ -35,6 +37,59 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
     fse.writeJSONSync(this.configFilename, this.globalFlags)
   }
 
+  protected wizard = async () => {
+    if (!this.globalFlags['ra-key']) {
+      const answer = await prompt({
+        type: 'input',
+        name: 'key',
+        message: 'Enter your RA-API (private beta access) key',
+      })
+
+      const url = new URL(this.apiUrl + '/key')
+      url.search = new URLSearchParams({
+        raApiKey: answer.key,
+      }).toString()
+
+      await axios.get(url.href).catch(this.processApiError)
+      if (this.gotError) return
+      this.globalFlags['ra-key'] = answer.key
+      this.saveConfig()
+    }
+
+    if (!this.globalFlags.simulate) {
+      const question = await new Select({
+        choices: ['No', 'Yes'],
+        message: 'Do you want to enable simulation for flash loan transactions (requires tenderly API details)',
+      })
+      const answer = await question.run()
+      this.globalFlags.simulate = answer === 'Yes' ? 'on' : 'off'
+      if (answer === 'Yes') {
+        const answers = await prompt([
+          {
+            type: 'input',
+            name: 'tenderly-key',
+            message: 'Enter your TENDERLY_ACCESS_KEY - generate at https://dashboard.tenderly.co/account/authorization',
+          },
+          {
+            type: 'input',
+            name: 'tenderly-user',
+            message: 'Enter your TENDERLY_USER - get from https://dashboard.tenderly.co/account',
+          },
+          {
+            type: 'input',
+            name: 'tenderly-project',
+            message: 'Enter your TENDERLY_PROJECT - generate at https://dashboard.tenderly.co/projects/create or get from https://dashboard.tenderly.co/projects',
+          },
+        ])
+        for (const key of ['tenderly-key', 'tenderly-user', 'tenderly-project']) {
+          this.globalFlags[key] = answers[key]
+        }
+      }
+
+      this.saveConfig()
+    }
+  }
+
   protected readConfig: any = () => {
     if (!fse.existsSync(this.configFilename)) {
       fse.outputFileSync(this.configFilename, JSON.stringify({
@@ -42,7 +97,6 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
         'protocol-aave': 'v3',
         'protocol-uni': 'v2',
         privacy: 'pub',
-        simulate: 'off',
       }))
     }
 
@@ -74,6 +128,7 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
   public async init(): Promise<void> {
     this.globalFlags = this.readConfig()
     this.storage = this.readStorage()
+    this.wizard()
     await super.init()
   }
 }
