@@ -20,7 +20,7 @@
   "dependencies": {
     "@oclif/core": "^1.19.1",
     "@oclif/plugin-help": "^5",
-    "@oclif/plugin-plugins": "^2.1.6",
+    "@oclif/plugin-plugins": "^2.1.9",
     "axios": "^1.2.1",
     "enquirer": "^2.3.6",
     "fs-extra": "^10.1.0",
