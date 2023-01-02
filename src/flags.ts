@@ -19,9 +19,9 @@ export const asset = Flags.string({
   required: true,
 })
 
-export const value = Flags.string({
+export const amount = Flags.string({
   char: 'v',
-  description: 'specify value',
+  description: 'specify amount',
 })
 
 export const mainnet = Flags.boolean({

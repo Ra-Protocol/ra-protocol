@@ -1,6 +1,6 @@
 import {BaseCommand} from '../../baseCommand'
 import getWalletKey from '../../lib/wallet-key'
-import {asset, chain, mainnet, redeploy, type, value} from '../../flags'
+import {asset, chain, mainnet, redeploy, type, amount} from '../../flags'
 import axios from 'axios'
 import * as _ from 'lodash'
 
@@ -8,7 +8,7 @@ export default class Quickflash extends BaseCommand<any> {
   static description = 'Easiest, quickest option to get a flash loan up and running'
 
   static examples = [
-    `$ ra-protocol quickflash --chain avalanche --type arb --asset DAI --asset USDC --value 1000000000000000000
+    `$ ra-protocol quickflash --chain avalanche --type arb --asset DAI --asset USDC --amount 1000000000000000000
 Paste private key of wallet you want to run quickflash from: ****************************************************************
 {
   contract: {
@@ -34,7 +34,7 @@ Flashloan is complete
     redeploy,
     type,
     asset,
-    value,
+    amount,
   }
 
   async run(): Promise<void> {
@@ -49,7 +49,7 @@ Flashloan is complete
       chain: flags.chain,
       'protocol-aave': this.globalFlags['protocol-aave'],
       assets,
-      value: flags.value,
+      amount: flags.amount,
     }
     const contractAddress = _.get(this.storage, `contract.${flags.chain}.aave-${this.globalFlags['protocol-aave']}.uni-${this.globalFlags['protocol-uni']}`)
 
