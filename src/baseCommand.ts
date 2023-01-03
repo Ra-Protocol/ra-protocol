@@ -7,7 +7,7 @@ import axios from 'axios'
 export type Flags<T extends typeof Command> = Interfaces.InferredFlags<typeof BaseCommand['globalFlags'] & T['flags']>
 
 export abstract class BaseCommand<T extends typeof Command> extends Command {
-  protected apiUrl = 'https://ra-protocol-api.vercel.app/api'
+  protected apiUrl = 'https://api.ra.xyz/api'
 
   protected globalFlags: any
 
@@ -93,7 +93,6 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
   protected readConfig: any = () => {
     if (!fse.existsSync(this.configFilename)) {
       fse.outputFileSync(this.configFilename, JSON.stringify({
-        'api-url': 'https://api.ra.xyz/api',
         'protocol-aave': 'v3',
         'protocol-uni': 'v2',
         privacy: 'pub',
