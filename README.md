@@ -19,7 +19,7 @@ $ npm install -g ra-protocol
 $ ra-protocol COMMAND
 running command...
 $ ra-protocol (--version)
-ra-protocol/0.9.0 darwin-x64 node-v14.21.2
+ra-protocol/0.10.0 darwin-x64 node-v14.21.2
 $ ra-protocol --help [COMMAND]
 USAGE
   $ ra-protocol COMMAND
@@ -28,94 +28,20 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`ra-protocol check-flashable`](#ra-protocol-check-flashable)
-* [`ra-protocol check-most-liquid-flash`](#ra-protocol-check-most-liquid-flash)
 * [`ra-protocol config`](#ra-protocol-config)
 * [`ra-protocol config get`](#ra-protocol-config-get)
 * [`ra-protocol config set`](#ra-protocol-config-set)
 * [`ra-protocol config update-private-key`](#ra-protocol-config-update-private-key)
+* [`ra-protocol debt borrow`](#ra-protocol-debt-borrow)
+* [`ra-protocol debt delegate`](#ra-protocol-debt-delegate)
+* [`ra-protocol debt repay`](#ra-protocol-debt-repay)
+* [`ra-protocol debt request`](#ra-protocol-debt-request)
+* [`ra-protocol debt status`](#ra-protocol-debt-status)
+* [`ra-protocol debt transfer`](#ra-protocol-debt-transfer)
+* [`ra-protocol debt transfer approve`](#ra-protocol-debt-transfer-approve)
+* [`ra-protocol debt transfer request`](#ra-protocol-debt-transfer-request)
 * [`ra-protocol help [COMMAND]`](#ra-protocol-help-command)
 * [`ra-protocol quickflash`](#ra-protocol-quickflash)
-
-## `ra-protocol check-flashable`
-
-Check the amount of liquidity currently flashable for a certain asset on a certain chain
-
-```
-USAGE
-  $ ra-protocol check-flashable -c ethereum|bsc|avalanche|solana -a <value>
-
-FLAGS
-  -a, --asset=<value>...                       (required) specify asset
-  -c, --chain=(ethereum|bsc|avalanche|solana)  (required) specify which chain
-
-DESCRIPTION
-  Check the amount of liquidity currently flashable for a certain asset on a certain chain
-
-EXAMPLES
-  $ ra-protocol check-flashable --chain ethereum
-  Checking is complete
-
-FLAG DESCRIPTIONS
-  -a, --asset=<value>...  
-
-    specify asset
-
-  -c, --chain=(ethereum|bsc|avalanche|solana)
-
-        ethereum: Ethereum
-        bsc: Binance Smart Chain
-        avalanche: Avalanche
-        solana: Solana
-
-CONFIG USAGE
-  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
-
-  For details run
-  $ ra-protocol config set --help
-```
-
-_See code: [dist/commands/check-flashable/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.9.0/dist/commands/check-flashable/index.ts)_
-
-## `ra-protocol check-most-liquid-flash`
-
-Checks all connected chains for the most liquid network available to flash loan an input asset
-
-```
-USAGE
-  $ ra-protocol check-most-liquid-flash -c ethereum|bsc|avalanche|solana -a <value>
-
-FLAGS
-  -a, --asset=<value>...                       (required) specify asset
-  -c, --chain=(ethereum|bsc|avalanche|solana)  (required) specify which chain
-
-DESCRIPTION
-  Checks all connected chains for the most liquid network available to flash loan an input asset
-
-EXAMPLES
-  $ ra-protocol check-most-liquid-flash --chain ethereum
-  Checking is complete
-
-FLAG DESCRIPTIONS
-  -a, --asset=<value>...  
-
-    specify asset
-
-  -c, --chain=(ethereum|bsc|avalanche|solana)
-
-        ethereum: Ethereum
-        bsc: Binance Smart Chain
-        avalanche: Avalanche
-        solana: Solana
-
-CONFIG USAGE
-  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
-
-  For details run
-  $ ra-protocol config set --help
-```
-
-_See code: [dist/commands/check-most-liquid-flash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.9.0/dist/commands/check-most-liquid-flash/index.ts)_
 
 ## `ra-protocol config`
 
@@ -129,7 +55,7 @@ DESCRIPTION
   Get/Set configuration
 ```
 
-_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.9.0/dist/commands/config/index.ts)_
+_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.10.0/dist/commands/config/index.ts)_
 
 ## `ra-protocol config get`
 
@@ -251,6 +177,512 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
+## `ra-protocol debt borrow`
+
+Perform approved loan from a user
+
+```
+USAGE
+  $ ra-protocol debt borrow -c ethereum|arbitrum|avalanche --lender <value> --asset <value> [-m] [-r] [-a <value>]
+
+FLAGS
+  -a, --amount=<value>                       specify amount
+  -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
+  -m, --mainnet                              specify to run on mainnet
+  -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
+  --asset=<value>...                         (required) specify asset
+  --lender=<value>                           (required) email of lender
+
+DESCRIPTION
+  Perform approved loan from a user
+
+EXAMPLES
+  $ ra-protocol debt borrow --chain arbitrum --lender lender@gmail.com --asset DAI --amount 1
+  {
+    flashloan: {
+      transactionHash: '0x11bc565368abbeec55df446eebe43e663419efc8cca7d15766f221c01cb6927a',
+      explore: 'https://goerli.arbiscan.io/tx/0x11bc565368abbeec55df446eebe43e663419efc8cca7d15766f221c01cb6927a'
+    },
+    withdraw: {
+      transactionHash: '0x3ae261ef80bdb8ff496136e8ff18229177461b615631db3f6b3f9ba7dcedb2a1',
+      explore: 'https://goerli.arbiscan.io/tx/0x3ae261ef80bdb8ff496136e8ff18229177461b615631db3f6b3f9ba7dcedb2a1'
+    }
+  }
+  Flashloan is complete
+
+FLAG DESCRIPTIONS
+  -a, --amount=<value>  
+
+    specify amount
+
+  -c, --chain=(ethereum|arbitrum|avalanche)
+
+        ethereum: Ethereum (Goerli for testnet)
+        arbitrum: Arbitrum One (Arbitrum Goerli for testnet)
+        avalanche: Avalanche C-Chain (Fuji for testnet)
+
+  -m, --mainnet  
+
+    specify to run on mainnet
+
+  -r, --redeploy  
+
+    force contract redeploy (on default, reusing last deployed contract)
+
+  --asset=<value>...  
+
+    specify asset
+
+  --lender=<value>  
+
+    email of lender
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
+
+  For details run
+  $ ra-protocol config set --help
+```
+
+## `ra-protocol debt delegate`
+
+approve borrow request (delegate borrowing power request to a user)
+
+```
+USAGE
+  $ ra-protocol debt delegate -c ethereum|arbitrum|avalanche --borrower <value> --collateral <value> --asset
+    <value> [-m] [-r] [-a <value>]
+
+FLAGS
+  -a, --amount=<value>                       specify amount
+  -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
+  -m, --mainnet                              specify to run on mainnet
+  -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
+  --asset=<value>...                         (required) specify asset
+  --borrower=<value>                         (required) email of borrower
+  --collateral=<value>...                    (required) specify collateral
+
+DESCRIPTION
+  approve borrow request (delegate borrowing power request to a user)
+
+EXAMPLES
+  $ ra-protocol debt delegate --chain arbitrum --borrower borrower@gmail.com --collateral ETH --asset DAI --amount 0.001
+  {
+    contract: {
+      address: '0xf56846af288AbcAa1751f5Bc080E7bc4D93fAfBa',
+      explore: 'https://goerli.arbiscan.io/address/0xf56846af288AbcAa1751f5Bc080E7bc4D93fAfBa'
+    },
+    approve: {
+      transactionHash: '0xe9a010975288c6d49626a09e2b8ca355d968ddf8dc564be0438c67914844d12b',
+      explore: 'https://goerli.arbiscan.io/tx/0xe9a010975288c6d49626a09e2b8ca355d968ddf8dc564be0438c67914844d12b'
+    },
+    depositCoinAsCollateral: {
+      transactionHash: '0x7750522951fad50c0141d8f3cb2131695750ac286f89f0391fb7b5d85b76f875',
+      explore: 'https://goerli.arbiscan.io/tx/0x7750522951fad50c0141d8f3cb2131695750ac286f89f0391fb7b5d85b76f875'
+    },
+    approveBorrower: {
+      transactionHash: '0xde925d9111e00fd79e89dea30ff7d27f3a17fba812da72ba03b6a6b918254b52',
+      explore: 'https://goerli.arbiscan.io/tx/0xde925d9111e00fd79e89dea30ff7d27f3a17fba812da72ba03b6a6b918254b52'
+    }
+  }
+  credit delegation is approved
+
+FLAG DESCRIPTIONS
+  -a, --amount=<value>  
+
+    specify amount
+
+  -c, --chain=(ethereum|arbitrum|avalanche)
+
+        ethereum: Ethereum (Goerli for testnet)
+        arbitrum: Arbitrum One (Arbitrum Goerli for testnet)
+        avalanche: Avalanche C-Chain (Fuji for testnet)
+
+  -m, --mainnet  
+
+    specify to run on mainnet
+
+  -r, --redeploy  
+
+    force contract redeploy (on default, reusing last deployed contract)
+
+  --asset=<value>...  
+
+    specify asset
+
+  --borrower=<value>  
+
+    email of borrower
+
+  --collateral=<value>...  
+
+    specify collateral
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
+
+  For details run
+  $ ra-protocol config set --help
+```
+
+## `ra-protocol debt repay`
+
+Easiest, quickest option to get a flash loan up and running
+
+```
+USAGE
+  $ ra-protocol debt repay -c ethereum|arbitrum|avalanche --lender <value> --asset <value> [-m] [-r] [-a <value>]
+
+FLAGS
+  -a, --amount=<value>                       specify amount
+  -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
+  -m, --mainnet                              specify to run on mainnet
+  -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
+  --asset=<value>...                         (required) specify asset
+  --lender=<value>                           (required) email of lender
+
+DESCRIPTION
+  Easiest, quickest option to get a flash loan up and running
+
+EXAMPLES
+  $ ra-protocol debt repay --chain arbitrum --lender lender@gmail.com --asset DAI --amount 1
+  {
+    approve: {
+      transactionHash: '0xe7c52a366800ae944590d7ca9072ddef9059902955b05bcce51ed22105550f9c',
+      explore: 'https://goerli.arbiscan.io/tx/0xe7c52a366800ae944590d7ca9072ddef9059902955b05bcce51ed22105550f9c'
+    },
+    repay: {
+      transactionHash: '0x67cf9436aef20919d2a434c4476f65c36208d4f6fc54effb3ecf8b7767f1c47b',
+      explore: 'https://goerli.arbiscan.io/tx/0x67cf9436aef20919d2a434c4476f65c36208d4f6fc54effb3ecf8b7767f1c47b'
+    }
+  }
+  Loan repayment is complete
+
+FLAG DESCRIPTIONS
+  -a, --amount=<value>  
+
+    specify amount
+
+  -c, --chain=(ethereum|arbitrum|avalanche)
+
+        ethereum: Ethereum (Goerli for testnet)
+        arbitrum: Arbitrum One (Arbitrum Goerli for testnet)
+        avalanche: Avalanche C-Chain (Fuji for testnet)
+
+  -m, --mainnet  
+
+    specify to run on mainnet
+
+  -r, --redeploy  
+
+    force contract redeploy (on default, reusing last deployed contract)
+
+  --asset=<value>...  
+
+    specify asset
+
+  --lender=<value>  
+
+    email of lender
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
+
+  For details run
+  $ ra-protocol config set --help
+```
+
+## `ra-protocol debt request`
+
+Send loan request to a user
+
+```
+USAGE
+  $ ra-protocol debt request -c ethereum|arbitrum|avalanche --lender <value> [-m] [-r] [-t]
+
+FLAGS
+  -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
+  -m, --mainnet                              specify to run on mainnet
+  -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
+  -t, --transferable                         enable debt transfer support (experemental)
+  --lender=<value>                           (required) email of lender
+
+DESCRIPTION
+  Send loan request to a user
+
+EXAMPLES
+  $ ra-protocol debt request --chain arbitrum --lender lender@gmail.com
+  {
+    contract: {
+      address: '0x606a344B991635a112222111b5a27fcDd2b15BA1',
+      explore: 'https://goerli.arbiscan.io/address/0x606a344B991635a112222111b5a27fcDd2b15BA1'
+    },
+    request: { lender: 'lender@gmail.com', sent: true }
+  }
+  Request is sent
+
+FLAG DESCRIPTIONS
+  -c, --chain=(ethereum|arbitrum|avalanche)
+
+        ethereum: Ethereum (Goerli for testnet)
+        arbitrum: Arbitrum One (Arbitrum Goerli for testnet)
+        avalanche: Avalanche C-Chain (Fuji for testnet)
+
+  -m, --mainnet  
+
+    specify to run on mainnet
+
+  -r, --redeploy  
+
+    force contract redeploy (on default, reusing last deployed contract)
+
+  -t, --transferable  
+
+    enable debt transfer support (experemental)
+
+  --lender=<value>  
+
+    email of lender
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
+
+  For details run
+  $ ra-protocol config set --help
+```
+
+## `ra-protocol debt status`
+
+approve borrow request (delegate borrowing power request to a user)
+
+```
+USAGE
+  $ ra-protocol debt status -c ethereum|arbitrum|avalanche [-m]
+
+FLAGS
+  -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
+  -m, --mainnet                              specify to run on mainnet
+
+DESCRIPTION
+  approve borrow request (delegate borrowing power request to a user)
+
+EXAMPLES
+  $ ra-protocol debt status --chain arbitrum
+  Your balance of debt to lender@gmail.com:
+    DAI: 0.020400004052819184
+
+FLAG DESCRIPTIONS
+  -c, --chain=(ethereum|arbitrum|avalanche)
+
+        ethereum: Ethereum (Goerli for testnet)
+        arbitrum: Arbitrum One (Arbitrum Goerli for testnet)
+        avalanche: Avalanche C-Chain (Fuji for testnet)
+
+  -m, --mainnet  
+
+    specify to run on mainnet
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
+
+  For details run
+  $ ra-protocol config set --help
+```
+
+## `ra-protocol debt transfer`
+
+Perform approved debt transfer from another user
+
+```
+USAGE
+  $ ra-protocol debt transfer -c ethereum|arbitrum|avalanche --loan <value> --asset <value> [-m] [-r] [-a <value>]
+
+FLAGS
+  -a, --amount=<value>                       specify amount
+  -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
+  -m, --mainnet                              specify to run on mainnet
+  -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
+  --asset=<value>...                         (required) specify asset
+  --loan=<value>                             (required) loan address
+
+DESCRIPTION
+  Perform approved debt transfer from another user
+
+EXAMPLES
+  $ ra-protocol debt transfer --chain arbitrum --loan 0xE0F70c5BB5a2f37983312aF9314D47175028f36c --asset DAI --amount 1
+  {
+    flashloanAndRepay: {
+      transactionHash: '0xd6a71e07ed46a3049c69f57f352132fb62d3623371c405e1ad2c20a1ccd7ba6d',
+      explore: 'https://goerli.arbiscan.io/tx/0xd6a71e07ed46a3049c69f57f352132fb62d3623371c405e1ad2c20a1ccd7ba6d'
+    },
+    withdraw: {
+      transactionHash: '0x8737e7535cab16cd426dd05c922190f75a2e9d9b3ac36ed0b63a247b4cfbe8c2',
+      explore: 'https://goerli.arbiscan.io/tx/0x8737e7535cab16cd426dd05c922190f75a2e9d9b3ac36ed0b63a247b4cfbe8c2'
+    }
+  }
+  Flashloan is complete
+
+FLAG DESCRIPTIONS
+  -a, --amount=<value>  
+
+    specify amount
+
+  -c, --chain=(ethereum|arbitrum|avalanche)
+
+        ethereum: Ethereum (Goerli for testnet)
+        arbitrum: Arbitrum One (Arbitrum Goerli for testnet)
+        avalanche: Avalanche C-Chain (Fuji for testnet)
+
+  -m, --mainnet  
+
+    specify to run on mainnet
+
+  -r, --redeploy  
+
+    force contract redeploy (on default, reusing last deployed contract)
+
+  --asset=<value>...  
+
+    specify asset
+
+  --loan=<value>  
+
+    loan address
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
+
+  For details run
+  $ ra-protocol config set --help
+```
+
+## `ra-protocol debt transfer approve`
+
+Approve debt transfer request (allow user to repay your loan with condition of delegating your borrowing power)
+
+```
+USAGE
+  $ ra-protocol debt transfer approve -c ethereum|arbitrum|avalanche --recipient <value> --collateral <value> --asset
+    <value> [-m] [-r] [-a <value>]
+
+FLAGS
+  -a, --amount=<value>                       specify amount
+  -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
+  -m, --mainnet                              specify to run on mainnet
+  -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
+  --asset=<value>...                         (required) specify asset
+  --collateral=<value>...                    (required) specify collateral
+  --recipient=<value>                        (required) email of debt recipient
+
+DESCRIPTION
+  Approve debt transfer request (allow user to repay your loan with condition of delegating your borrowing power)
+
+EXAMPLES
+  $ ra-protocol debt transfer approve --chain arbitrum --recipient recipient@gmail.com --collateral ETH --asset DAI --amount 0.001
+  {
+    depositCoinAsCollateral: {
+      transactionHash: '0x09fd138e91c2dfb00eaf7bc7fb47276c5d7d4211a740d7b716d32ce575824e1f',
+      explore: 'https://goerli.arbiscan.io/tx/0x09fd138e91c2dfb00eaf7bc7fb47276c5d7d4211a740d7b716d32ce575824e1f'
+    },
+    approveBorrower: {
+      transactionHash: '0x310245e87ac2764968df4ae18fdb609fe9bb7100a379e416dac38d8cfa3924fa',
+      explore: 'https://goerli.arbiscan.io/tx/0x310245e87ac2764968df4ae18fdb609fe9bb7100a379e416dac38d8cfa3924fa'
+    }
+  }
+  debt transfer is approved
+
+FLAG DESCRIPTIONS
+  -a, --amount=<value>  
+
+    specify amount
+
+  -c, --chain=(ethereum|arbitrum|avalanche)
+
+        ethereum: Ethereum (Goerli for testnet)
+        arbitrum: Arbitrum One (Arbitrum Goerli for testnet)
+        avalanche: Avalanche C-Chain (Fuji for testnet)
+
+  -m, --mainnet  
+
+    specify to run on mainnet
+
+  -r, --redeploy  
+
+    force contract redeploy (on default, reusing last deployed contract)
+
+  --asset=<value>...  
+
+    specify asset
+
+  --collateral=<value>...  
+
+    specify collateral
+
+  --recipient=<value>  
+
+    email of debt recipient
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
+
+  For details run
+  $ ra-protocol config set --help
+```
+
+## `ra-protocol debt transfer request`
+
+Send debt transfer request to a user
+
+```
+USAGE
+  $ ra-protocol debt transfer request -c ethereum|arbitrum|avalanche --loan <value> [-m] [-r]
+
+FLAGS
+  -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
+  -m, --mainnet                              specify to run on mainnet
+  -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
+  --loan=<value>                             (required) loan address
+
+DESCRIPTION
+  Send debt transfer request to a user
+
+EXAMPLES
+  $ ra-protocol debt transfer request --chain arbitrum --loan 0xE0F70c5BB5a2f37983312aF9314D47175028f36c
+  {
+    contract: {
+      address: '0xf9D85AC95E532C7B66D14F50B2716ff20807c78C',
+      explore: 'https://goerli.arbiscan.io/address/0xf9D85AC95E532C7B66D14F50B2716ff20807c78C'
+    },
+    transferRequest: { loan: '0xE0F70c5BB5a2f37983312aF9314D47175028f48c', sent: true }
+  }
+  Request is sent
+
+FLAG DESCRIPTIONS
+  -c, --chain=(ethereum|arbitrum|avalanche)
+
+        ethereum: Ethereum (Goerli for testnet)
+        arbitrum: Arbitrum One (Arbitrum Goerli for testnet)
+        avalanche: Avalanche C-Chain (Fuji for testnet)
+
+  -m, --mainnet  
+
+    specify to run on mainnet
+
+  -r, --redeploy  
+
+    force contract redeploy (on default, reusing last deployed contract)
+
+  --loan=<value>  
+
+    loan address
+
+CONFIG USAGE
+  This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
+
+  For details run
+  $ ra-protocol config set --help
+```
+
 ## `ra-protocol help [COMMAND]`
 
 Display help for ra-protocol.
@@ -288,24 +720,20 @@ Easiest, quickest option to get a flash loan up and running
 
 ```
 USAGE
-  $ ra-protocol quickflash -c ethereum|bsc|avalanche|solana -t
-    arb|liquidate|collateral-swap|eipfl|multiasset|custom -a <value> [-m] [-r] [-v <value>]
+  $ ra-protocol quickflash -c ethereum|arbitrum|avalanche --asset <value> [-m] [-r] [-a <value>]
 
 FLAGS
-  -a, --asset=<value>...                                              (required) specify asset
-  -c, --chain=(ethereum|bsc|avalanche|solana)                         (required) specify which chain
-  -m, --mainnet                                                       specify to run on mainnet
-  -r, --redeploy                                                      force contract redeploy (on default, reusing last
-                                                                      deployed contract)
-  -t, --type=(arb|liquidate|collateral-swap|eipfl|multiasset|custom)  (required) Specify the type of flash loan preset
-  -v, --value=<value>                                                 specify value
+  -a, --amount=<value>                       specify amount
+  -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
+  -m, --mainnet                              specify to run on mainnet
+  -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
+  --asset=<value>...                         (required) specify asset
 
 DESCRIPTION
   Easiest, quickest option to get a flash loan up and running
 
 EXAMPLES
-  $ ra-protocol quickflash --chain avalanche --type arb --asset DAI --asset USDC --value 1000000000000000000
-  Paste private key of wallet you want to run quickflash from: ****************************************************************
+  $ ra-protocol quickflash --chain avalanche --asset DAI --asset USDC --amount 1000000000000000000
   {
     contract: {
       address: '0xDD70A6B85bbfA9b8e36e77C0ce9ddBcba2De870A',
@@ -323,16 +751,15 @@ EXAMPLES
   Flashloan is complete
 
 FLAG DESCRIPTIONS
-  -a, --asset=<value>...  
+  -a, --amount=<value>  
 
-    specify asset
+    specify amount
 
-  -c, --chain=(ethereum|bsc|avalanche|solana)
+  -c, --chain=(ethereum|arbitrum|avalanche)
 
-        ethereum: Ethereum
-        bsc: Binance Smart Chain
-        avalanche: Avalanche
-        solana: Solana
+        ethereum: Ethereum (Goerli for testnet)
+        arbitrum: Arbitrum One (Arbitrum Goerli for testnet)
+        avalanche: Avalanche C-Chain (Fuji for testnet)
 
   -m, --mainnet  
 
@@ -342,30 +769,9 @@ FLAG DESCRIPTIONS
 
     force contract redeploy (on default, reusing last deployed contract)
 
-  -t, --type=(arb|liquidate|collateral-swap|eipfl|multiasset|custom)
+  --asset=<value>...  
 
-        arb: Basic arbitrage flash loan layout
-             This will call an iteration of flashloanSimple, which calls makeArbitrage, swapping the
-             flashloaned token for another token using one swap router, and then swapping back to the original
-             token using another swap router
-
-        liquidate: Basic liquidation flash loan
-                   This will call an iteration of flashloanSimple, which calls makeArbitrage, adding the
-                   flashloaned tokens as well as tokens within our contract balance as liquidity on a
-                   token pair (AKA liquidity pool), and then removing the same amount of liquidity
-
-        collateral-swap: Collateral swap flash loan
-        eipfl: EIP-3156 interface flash loan
-        multiasset: Multi-asset flash loan
-                    This will call an iteration of flashloan, which borrows more than 1 token, which can
-                    then be swapped, added as liquidity, etc. as long as all borrowed token amounts are
-                    paid back at the end
-
-        custom: Custom logic
-
-  -v, --value=<value>  
-
-    specify value
+    specify asset
 
 CONFIG USAGE
   This command behavior affected by following config variables: protocol-aave, protocol-uni, privacy
@@ -374,5 +780,5 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.9.0/dist/commands/quickflash/index.ts)_
+_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.10.0/dist/commands/quickflash/index.ts)_
 <!-- commandsstop -->
