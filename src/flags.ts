@@ -6,21 +6,19 @@ export const chain = Flags.enum({
   required: true,
   options: [
     'ethereum',
-    'bsc',
+    'arbitrum',
     'avalanche',
-    'solana',
   ],
 })
 
 export const asset = Flags.string({
-  char: 'a',
   description: 'specify asset',
   multiple: true,
   required: true,
 })
 
 export const amount = Flags.string({
-  char: 'v',
+  char: 'a',
   description: 'specify amount',
 })
 

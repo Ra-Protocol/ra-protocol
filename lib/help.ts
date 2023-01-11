@@ -5,13 +5,12 @@ const {Help, CommandHelp} = require('@oclif/core')
 
 const optionDescriptions = {
   chain: {
-    ethereum: 'Ethereum',
-    bsc: 'Binance Smart Chain',
-    avalanche: 'Avalanche',
-    solana: 'Solana',
+    ethereum: 'Ethereum (Goerli for testnet)',
+    arbitrum: 'Arbitrum One (Arbitrum Goerli for testnet)',
+    avalanche: 'Avalanche C-Chain (Fuji for testnet)',
   },
   from: {
-    eao: 'From your EOA',
+    eao: 'From your EOA (Externally Owned Account)',
     sep: 'From a separate contract',
     this: 'From the same contract',
   },

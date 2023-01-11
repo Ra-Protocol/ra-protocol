@@ -1,6 +1,6 @@
 import {BaseCommand} from '../../baseCommand'
 import getWalletKey from '../../lib/wallet-key'
-import {asset, chain, mainnet, redeploy, type, amount} from '../../flags'
+import {asset, chain, mainnet, redeploy, amount} from '../../flags'
 import axios from 'axios'
 import * as _ from 'lodash'
 
@@ -8,8 +8,7 @@ export default class Quickflash extends BaseCommand<any> {
   static description = 'Easiest, quickest option to get a flash loan up and running'
 
   static examples = [
-    `$ ra-protocol quickflash --chain avalanche --type arb --asset DAI --asset USDC --amount 1000000000000000000
-Paste private key of wallet you want to run quickflash from: ****************************************************************
+    `$ ra-protocol quickflash --chain avalanche --asset DAI --asset USDC --amount 1000000000000000000
 {
   contract: {
     address: '0xDD70A6B85bbfA9b8e36e77C0ce9ddBcba2De870A',
@@ -32,7 +31,6 @@ Flashloan is complete
     chain,
     mainnet,
     redeploy,
-    type,
     asset,
     amount,
   }
@@ -88,6 +86,8 @@ Flashloan is complete
     url.search = new URLSearchParams(params as keyof unknown).toString()
 
     const response = await axios.get(url.href).catch(this.processApiError) as any
+    if (this.gotError) return
+
     if (response.data && response.data.contract) {
       _.set(this.storage, `contract.${flags.chain}.aave-${this.globalFlags['protocol-aave']}.uni-${this.globalFlags['protocol-uni']}`, response.data.contract.address)
       this.saveStorage()
@@ -97,7 +97,7 @@ Flashloan is complete
       this.log(response.data)
     }
 
-    if (!this.gotError && !(response.data && response.data.flashloan && !response.data.flashloan.error)) {
+    if (!this.gotError && response.data && response.data.flashloan && !response.data.flashloan.error) {
       this.log('Flashloan is complete')
     }
   }
