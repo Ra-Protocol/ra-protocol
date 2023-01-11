@@ -37,6 +37,20 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
     fse.writeJSONSync(this.configFilename, this.globalFlags)
   }
 
+  protected risksConsent = async () => {
+    this.error('mainnet operations are currently disabled for security upgrades')
+    const yesAnswer = 'Yes, I am willing to loose funds'
+    const noAnswer = 'No, I am NOT willing to loose funds'
+    const question = await new Select({
+      choices: [noAnswer, yesAnswer],
+      message: 'This is beta. On mainnet only use funds you`re willing to lose!',
+    })
+    const answer = await question.run()
+    if (answer === noAnswer) {
+      this.error('To avoid loosing funds use testnet')
+    }
+  }
+
   protected wizard = async () => {
     if (!this.globalFlags['ra-key']) {
       const answer = await prompt({
@@ -109,6 +123,10 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
         if (error.response.data.error?.reason) {
           console.log(error.response.data)
           this.error('Network returned exception')
+        }
+
+        if (error.response.data.error) {
+          this.error(`API returned exception: ${error.response.data.error}`)
         } else {
           this.warn(error.response.data)
         }

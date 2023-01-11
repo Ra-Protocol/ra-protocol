@@ -42,6 +42,7 @@ Flashloan is complete
     const params: {
       [key: string]: any,
     } = {
+      cli: this.config.version,
       raApiKey: this.globalFlags['ra-key'],
       walletKey: walletKey,
       chain: flags.chain,
@@ -56,6 +57,7 @@ Flashloan is complete
     }
 
     if (flags.mainnet) {
+      await this.risksConsent()
       params.mainnet = true
     }
 
