@@ -19,7 +19,7 @@ $ npm install -g ra-protocol
 $ ra-protocol COMMAND
 running command...
 $ ra-protocol (--version)
-ra-protocol/0.10.0 darwin-x64 node-v14.21.2
+ra-protocol/0.11.0 darwin-x64 node-v14.21.2
 $ ra-protocol --help [COMMAND]
 USAGE
   $ ra-protocol COMMAND
@@ -55,7 +55,7 @@ DESCRIPTION
   Get/Set configuration
 ```
 
-_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.10.0/dist/commands/config/index.ts)_
+_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.11.0/dist/commands/config/index.ts)_
 
 ## `ra-protocol config get`
 
@@ -740,22 +740,14 @@ DESCRIPTION
   Easiest, quickest option to get a flash loan up and running
 
 EXAMPLES
-  $ ra-protocol quickflash --chain avalanche --asset DAI --asset USDC --amount 1000000000000000000
-  {
-    contract: {
-      address: '0xDD70A6B85bbfA9b8e36e77C0ce9ddBcba2De870A',
-      explore: 'https://testnet.snowtrace.io/address/0xDD70A6B85bbfA9b8e36e77C0ce9ddBcba2De870A'
-    },
-    setTokenAddresses: {
-      transactionHash: '0x0a0fd41c649dd8581a07954a352c50eb201e8c5f7f0994a71cf81bab445c8382',
-      explore: 'https://testnet.snowtrace.io/tx/0x0a0fd41c649dd8581a07954a352c50eb201e8c5f7f0994a71cf81bab445c8382'
-    },
-    flashloan: {
-      transactionHash: '0x5b489dbda79fb1a7a5d449cf973ee62ce6e3555836a68651b9a65771735ba501',
-      explore: 'https://testnet.snowtrace.io/tx/0x5b489dbda79fb1a7a5d449cf973ee62ce6e3555836a68651b9a65771735ba501'
-    }
-  }
+  $ ra-protocol quickflash --chain ethereum --asset DAI --asset USDC --amount 1000000000000000000
+  Using wallet 0x85b4BCB925E5EBDe5d8509Fc22F0A850E03470dA on network ethereum testnet
+  Contract deployed
+  https://goerli.etherscan.io/address/0xab81938A2Cce68e455cbB5c27C2010a4f7B1ffb5
+  Contract token addresses updated
+  https://goerli.etherscan.io/tx/0x431d534a4f04f6ffd1d9a06ed61e3d0ea06882fefc7cccaccc1c98d3c4f6f687
   Flashloan is complete
+  https://goerli.etherscan.io/tx/0x3147a6030f188b50850f01417788090a22674dc65ce48332d56d465fb49c0ad1
 
 FLAG DESCRIPTIONS
   -a, --amount=<value>  
@@ -787,5 +779,5 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.10.0/dist/commands/quickflash/index.ts)_
+_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.11.0/dist/commands/quickflash/index.ts)_
 <!-- commandsstop -->
