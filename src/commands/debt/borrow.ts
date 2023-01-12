@@ -56,7 +56,7 @@ Flashloan is complete
       params.mainnet = true
     }
 
-    const url = new URL(this.apiUrl + '/debt/borrow')
+    const url = new URL(this.invisibleFlags['api-url'] + '/debt/borrow')
     url.search = new URLSearchParams(params as keyof unknown).toString()
 
     const response = await axios.get(url.href).catch(this.processApiError) as any

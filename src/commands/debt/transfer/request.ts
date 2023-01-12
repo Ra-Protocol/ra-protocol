@@ -49,7 +49,7 @@ Request is sent
       params.mainnet = true
     }
 
-    const url = new URL(this.apiUrl + '/debt/transfer/request')
+    const url = new URL(this.invisibleFlags['api-url'] + '/debt/transfer/request')
     url.search = new URLSearchParams(params as keyof unknown).toString()
 
     const response = await axios.get(url.href).catch(this.processApiError) as any

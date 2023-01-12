@@ -70,7 +70,7 @@ credit delegation is approved
       params.redeploy = true
     }
 
-    const url = new URL(this.apiUrl + '/debt/delegate')
+    const url = new URL(this.invisibleFlags['api-url'] + '/debt/delegate')
     url.search = new URLSearchParams(params as keyof unknown).toString()
 
     const response = await axios.get(url.href).catch(this.processApiError) as any

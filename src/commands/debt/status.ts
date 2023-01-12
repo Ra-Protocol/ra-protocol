@@ -36,7 +36,7 @@ Your balance of debt to lender@gmail.com:
       params.mainnet = true
     }
 
-    const url = new URL(this.apiUrl + '/debt/status')
+    const url = new URL(this.invisibleFlags['api-url'] + '/debt/status')
     url.search = new URLSearchParams(params as keyof unknown).toString()
 
     const response = await axios.get(url.href).catch(this.processApiError) as any

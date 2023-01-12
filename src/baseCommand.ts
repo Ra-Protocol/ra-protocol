@@ -7,9 +7,9 @@ import axios from 'axios'
 export type Flags<T extends typeof Command> = Interfaces.InferredFlags<typeof BaseCommand['globalFlags'] & T['flags']>
 
 export abstract class BaseCommand<T extends typeof Command> extends Command {
-  protected apiUrl = 'https://api.ra.xyz/api'
-
   protected globalFlags: any
+
+  protected invisibleFlags: any
 
   protected storage: any
 
@@ -20,6 +20,8 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
   protected storageFilename = path.join(this.config.configDir, 'storage.json')
 
   protected configFilename = path.join(this.config.configDir, 'config.json')
+
+  protected invisibleConfigFilename = path.join(this.config.configDir, 'config.invisible.json')
 
   protected saveStorage = () => {
     fse.writeJSONSync(this.storageFilename, this.storage)
@@ -35,6 +37,10 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
 
   protected saveConfig = () => {
     fse.writeJSONSync(this.configFilename, this.globalFlags)
+  }
+
+  protected saveInvisibleConfig = () => {
+    fse.writeJSONSync(this.invisibleConfigFilename, this.invisibleFlags)
   }
 
   protected risksConsent = async () => {
@@ -59,7 +65,7 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
         message: 'Enter your RA-API (private beta access) key',
       })
 
-      const url = new URL(this.apiUrl + '/key')
+      const url = new URL(this.invisibleFlags['api-url'] + '/key')
       url.search = new URLSearchParams({
         raApiKey: answer.key,
       }).toString()
@@ -116,6 +122,19 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
     return fse.readJSONSync(this.configFilename)
   }
 
+  protected readInvisibleConfig: any = () => {
+    if (!fse.existsSync(this.invisibleConfigFilename)) {
+      fse.outputFileSync(this.invisibleConfigFilename, JSON.stringify({
+        'api-url': 'https://api.ra.xyz/api',
+      }))
+    }
+
+    return {
+      ...fse.readJSONSync(this.invisibleConfigFilename),
+      version: this.config.version,
+    }
+  }
+
   protected processApiError = (error: any) => {
     this.gotError = true
     if (error.response) {
@@ -144,8 +163,9 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
 
   public async init(): Promise<void> {
     this.globalFlags = this.readConfig()
+    this.invisibleFlags = this.readInvisibleConfig()
     this.storage = this.readStorage()
-    this.wizard()
+    await this.wizard()
     await super.init()
   }
 }

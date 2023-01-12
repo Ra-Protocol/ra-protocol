@@ -58,7 +58,7 @@ debt transfer is approved
       params.mainnet = true
     }
 
-    const url = new URL(this.apiUrl + '/debt/transfer/approve')
+    const url = new URL(this.invisibleFlags['api-url'] + '/debt/transfer/approve')
     url.search = new URLSearchParams(params as keyof unknown).toString()
 
     const response = await axios.get(url.href).catch(this.processApiError) as any
