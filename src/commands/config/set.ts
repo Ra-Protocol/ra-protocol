@@ -31,6 +31,7 @@ Configuration updated
         'privacy',
         'ra-key',
         'simulate',
+        'infura-key',
         'tenderly-key',
         'tenderly-user',
         'tenderly-project',
@@ -59,6 +60,9 @@ Configuration updated
     }),
     'ra-key': Flags.string({
       description: 'RA_API_KEY - generate at https://ra.xyz',
+    }),
+    'infura-key': Flags.string({
+      description: 'INFURA_API_KEY - generate at https://app.infura.io/dashboard',
     }),
     'tenderly-key': Flags.string({
       description: 'TENDERLY_ACCESS_KEY - generate at https://dashboard.tenderly.co/account/authorization',

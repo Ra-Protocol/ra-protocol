@@ -1,29 +1,27 @@
 import {BaseCommand} from '../../baseCommand'
-import getWalletKey from '../../lib/wallet-key'
-import {asset, chain, mainnet, redeploy, amount} from '../../flags'
-import axios from 'axios'
+import {ethers} from 'ethers'
 import * as _ from 'lodash'
+import {asset, chain, mainnet, redeploy, amount} from '../../flags'
+import {buildEnvironment, environment} from '../../lib/environment'
+import {callFlashLoan, deployArbitrageContract, maybeCallSetTokenAddresses} from '../../lib/ethers/quickflash'
+import {validateAmount, validateAssets, validateChainSupported} from '../../lib/validate/quickflash'
+import {exploreContract, exploreTransaction} from '../../lib/ethers/common'
+import {validateError} from '../../lib/validate/environment'
+import ArbV2 from '../../lib/constants/contracts/AaveV2UniV2/ArbV2.json'
+import ArbV3 from '../../lib/constants/contracts/AaveV3UniV2/ArbV3.json'
 
 export default class Quickflash extends BaseCommand<any> {
   static description = 'Easiest, quickest option to get a flash loan up and running'
 
   static examples = [
-    `$ ra-protocol quickflash --chain avalanche --asset DAI --asset USDC --amount 1000000000000000000
-{
-  contract: {
-    address: '0xDD70A6B85bbfA9b8e36e77C0ce9ddBcba2De870A',
-    explore: 'https://testnet.snowtrace.io/address/0xDD70A6B85bbfA9b8e36e77C0ce9ddBcba2De870A'
-  },
-  setTokenAddresses: {
-    transactionHash: '0x0a0fd41c649dd8581a07954a352c50eb201e8c5f7f0994a71cf81bab445c8382',
-    explore: 'https://testnet.snowtrace.io/tx/0x0a0fd41c649dd8581a07954a352c50eb201e8c5f7f0994a71cf81bab445c8382'
-  },
-  flashloan: {
-    transactionHash: '0x5b489dbda79fb1a7a5d449cf973ee62ce6e3555836a68651b9a65771735ba501',
-    explore: 'https://testnet.snowtrace.io/tx/0x5b489dbda79fb1a7a5d449cf973ee62ce6e3555836a68651b9a65771735ba501'
-  }
-}
+    `$ ra-protocol quickflash --chain ethereum --asset DAI --asset USDC --amount 1000000000000000000
+Using wallet 0x85b4BCB925E5EBDe5d8509Fc22F0A850E03470dA on network ethereum testnet
+Contract deployed
+https://goerli.etherscan.io/address/0xab81938A2Cce68e455cbB5c27C2010a4f7B1ffb5
+Contract token addresses updated
+https://goerli.etherscan.io/tx/0x431d534a4f04f6ffd1d9a06ed61e3d0ea06882fefc7cccaccc1c98d3c4f6f687
 Flashloan is complete
+https://goerli.etherscan.io/tx/0x3147a6030f188b50850f01417788090a22674dc65ce48332d56d465fb49c0ad1
 `,
   ]
 
@@ -36,71 +34,38 @@ Flashloan is complete
   }
 
   async run(): Promise<void> {
+    const env: environment = {} as any
+    let contractAddress: string
     const {flags} = await this.parse(Quickflash)
-    const assets = flags.asset?.join(',')
-    const walletKey = await getWalletKey()
-    const params: {
-      [key: string]: any,
-    } = {
-      cli: this.config.version,
-      raApiKey: this.globalFlags['ra-key'],
-      walletKey: walletKey,
-      chain: flags.chain,
-      'protocol-aave': this.globalFlags['protocol-aave'],
-      assets,
-      amount: flags.amount,
-    }
-    const contractAddress = _.get(this.storage, `contract.${flags.chain}.aave-${this.globalFlags['protocol-aave']}.uni-${this.globalFlags['protocol-uni']}`)
-
-    if (contractAddress) {
-      params.contractAddress = contractAddress
-    }
-
     if (flags.mainnet) {
       await this.risksConsent()
-      params.mainnet = true
     }
 
-    if (flags.redeploy) {
-      params.redeploy = true
-    }
+    await buildEnvironment(env, flags, this.globalFlags, this.invisibleFlags)
+    validateAssets(env)
+    validateAmount(env)
+    validateChainSupported(env)
 
-    if (this.globalFlags.simulate === 'on') {
-      const bold = (text: string) => '\u001B[1m' + text + '\u001B[0m'
-      if (!this.globalFlags['tenderly-key']) {
-        this.error(`simulation requires setting tenderly key, run ${bold('ra-protocol set config --help')} for details`)
-      }
-
-      if (!this.globalFlags['tenderly-user']) {
-        this.error(`simulation requires setting tenderly user, run ${bold('ra-protocol set config --help')} for details`)
-      }
-
-      if (!this.globalFlags['tenderly-project']) {
-        this.error(`simulation requires setting tenderly project, run ${bold('ra-protocol set config --help')} for details`)
-      }
-
-      params.tenderlyKey = this.globalFlags['tenderly-key']
-      params.tenderlyUser = this.globalFlags['tenderly-user']
-      params.tenderlyProject = this.globalFlags['tenderly-project']
-    }
-
-    const url = new URL(this.apiUrl + '/quickflash')
-    url.search = new URLSearchParams(params as keyof unknown).toString()
-
-    const response = await axios.get(url.href).catch(this.processApiError) as any
-    if (this.gotError) return
-
-    if (response.data && response.data.contract) {
-      _.set(this.storage, `contract.${flags.chain}.aave-${this.globalFlags['protocol-aave']}.uni-${this.globalFlags['protocol-uni']}`, response.data.contract.address)
+    contractAddress = _.get(this.storage, `contract.${flags.chain}.aave-${this.globalFlags['protocol-aave']}.uni-${this.globalFlags['protocol-uni']}`)
+    if (!contractAddress || flags.redeploy) {
+      contractAddress = await deployArbitrageContract(env)
+      _.set(this.storage, `contract.${flags.chain}.aave-${this.globalFlags['protocol-aave']}.uni-${this.globalFlags['protocol-uni']}`, contractAddress)
       this.saveStorage()
+      this.log(exploreContract(env, contractAddress))
+    } else {
+      this.log(`Reusing contract ${contractAddress}`)
     }
 
-    if (response) {
-      this.log(response.data)
+    env.contracts.loanContract = new ethers.Contract(contractAddress, env.network.protocols.aave === 'v2' ? ArbV2 : ArbV3, env.network.managedSigner)
+
+    const setTokenAddressesHash = await maybeCallSetTokenAddresses(env).catch(validateError)
+    if (setTokenAddressesHash) {
+      this.log(exploreTransaction(env, setTokenAddressesHash))
     }
 
-    if (!this.gotError && response.data && response.data.flashloan && !response.data.flashloan.error) {
-      this.log('Flashloan is complete')
+    const flashLoanHash = await callFlashLoan(env).catch(validateError)
+    if (flashLoanHash) {
+      this.log(exploreTransaction(env, flashLoanHash))
     }
   }
 }

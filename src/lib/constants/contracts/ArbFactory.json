@@ -1,0 +1,172 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "arbV2ContractList",
+      "outputs": [
+        {
+          "internalType": "contract ArbV2",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "arbV3ContractList",
+      "outputs": [
+        {
+          "internalType": "contract ArbV3",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "aaveAddressProvider",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "router1",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "factory1",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "router2",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "factory2",
+          "type": "address"
+        }
+      ],
+      "name": "createArbV2Contract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "aaveAddressProvider",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "router1",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "factory1",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "router2",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "factory2",
+          "type": "address"
+        }
+      ],
+      "name": "createArbV3Contract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getUserArbV2Contracts",
+      "outputs": [
+        {
+          "internalType": "contract ArbV2[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getUserArbV3Contracts",
+      "outputs": [
+        {
+          "internalType": "contract ArbV3[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "params": {
+    "avalanche": {
+      "testnet": {
+        "v2": [
+          "0x7fdC1FdF79BE3309bf82f4abdAD9f111A6590C0f",
+          "0xd7f655E3376cE2D7A2b08fF01Eb3B1023191A901",
+          "0xF5c7d9733e5f53abCC1695820c4818C59B457C2C",
+          "0x2D99ABD9008Dc933ff5c0CD271B88309593aB921",
+          "0xE4A575550C2b460d2307b82dCd7aFe84AD1484dd"
+        ],
+        "v3": [
+          "0x1775ECC8362dB6CaB0c7A9C0957cF656A5276c29",
+          "0xd7f655E3376cE2D7A2b08fF01Eb3B1023191A901",
+          "0xF5c7d9733e5f53abCC1695820c4818C59B457C2C",
+          "0x2D99ABD9008Dc933ff5c0CD271B88309593aB921",
+          "0xE4A575550C2b460d2307b82dCd7aFe84AD1484dd"
+        ]
+      }
+    },
+    "ethereum": {
+      "testnet": {
+        "v2": [
+          "0x5E52dEc931FFb32f609681B8438A51c675cc232d",
+          "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+          "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+          "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
+          "0xc35DADB65012eC5796536bD9864eD8773aBc74C4"
+        ],
+        "v3": [
+          "0xc4dCB5126a3AfEd129BC3668Ea19285A9f56D15D",
+          "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+          "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+          "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
+          "0xc35DADB65012eC5796536bD9864eD8773aBc74C4"
+        ]
+      }
+    }
+  }
+}

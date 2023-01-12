@@ -4,6 +4,8 @@
     "importHelpers": true,
     "module": "commonjs",
     "outDir": "dist",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "rootDir": "src",
     "strict": true,
     "target": "es2019"

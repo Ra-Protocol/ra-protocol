@@ -74,8 +74,9 @@ EXAMPLES
     protocol-aave: v3
     protocol-uni: v2
     privacy: pub
-    ra-key: d41d8cd98f00b204e9800998ecf8427e
     simulate: on
+    ra-key: d41d8cd98f00b204e9800998ecf8427e
+    infura-key: e6abff3efce05b4891130f733ff6ac63
     tenderly-key: 4EFyPxPtcoyB4BFNAypscds2yI8mZGzM
     tenderly-user: cinderella
     tenderly-project: to-the-moon
@@ -88,9 +89,11 @@ Updates configuration
 ```
 USAGE
   $ ra-protocol config set [--protocol-aave v2|v3] [--protocol-uni v2|v3] [--privacy pub|secret] [--simulate
-    on|off] [--ra-key <value>] [--tenderly-key <value>] [--tenderly-user <value>] [--tenderly-project <value>]
+    on|off] [--ra-key <value>] [--infura-key <value>] [--tenderly-key <value>] [--tenderly-user <value>]
+    [--tenderly-project <value>]
 
 FLAGS
+  --infura-key=<value>        INFURA_API_KEY - generate at https://app.infura.io/dashboard
   --privacy=(pub|secret)      Transaction visiblity in the mempool
   --protocol-aave=(v2|v3)     Flash Loan protocol
   --protocol-uni=(v2|v3)      DEX protocol
@@ -117,6 +120,10 @@ EXAMPLES
   Configuration updated
 
 FLAG DESCRIPTIONS
+  --infura-key=<value>  
+
+    INFURA_API_KEY - generate at https://app.infura.io/dashboard
+
   --privacy=(pub|secret)
 
         pub: Transaction should be sent publicly (visible in the mempool)
