@@ -19,7 +19,7 @@ $ npm install -g ra-protocol
 $ ra-protocol COMMAND
 running command...
 $ ra-protocol (--version)
-ra-protocol/0.11.0 darwin-x64 node-v14.21.2
+ra-protocol/0.12.1 darwin-x64 node-v14.21.2
 $ ra-protocol --help [COMMAND]
 USAGE
   $ ra-protocol COMMAND
@@ -55,7 +55,7 @@ DESCRIPTION
   Get/Set configuration
 ```
 
-_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.11.0/dist/commands/config/index.ts)_
+_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.12.1/dist/commands/config/index.ts)_
 
 ## `ra-protocol config get`
 
@@ -88,11 +88,12 @@ Updates configuration
 
 ```
 USAGE
-  $ ra-protocol config set [--protocol-aave v2|v3] [--protocol-uni v2|v3] [--privacy pub|secret] [--simulate
-    on|off] [--ra-key <value>] [--infura-key <value>] [--tenderly-key <value>] [--tenderly-user <value>]
-    [--tenderly-project <value>]
+  $ ra-protocol config set [--protocol-aave v2|v3] [--protocol-uni v2|v3] [--privacy pub|secret] [--dashboard
+    on|off] [--simulate on|off] [--ra-key <value>] [--infura-key <value>] [--tenderly-key <value>] [--tenderly-user
+    <value>] [--tenderly-project <value>]
 
 FLAGS
+  --dashboard=(on|off)        Use truffle dashboard to sign transactions
   --infura-key=<value>        INFURA_API_KEY - generate at https://app.infura.io/dashboard
   --privacy=(pub|secret)      Transaction visiblity in the mempool
   --protocol-aave=(v2|v3)     Flash Loan protocol
@@ -120,6 +121,10 @@ EXAMPLES
   Configuration updated
 
 FLAG DESCRIPTIONS
+  --dashboard=(on|off)  
+
+    Use truffle dashboard to sign transactions
+
   --infura-key=<value>  
 
     INFURA_API_KEY - generate at https://app.infura.io/dashboard
@@ -779,5 +784,5 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.11.0/dist/commands/quickflash/index.ts)_
+_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.12.1/dist/commands/quickflash/index.ts)_
 <!-- commandsstop -->
