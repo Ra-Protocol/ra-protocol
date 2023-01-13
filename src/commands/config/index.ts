@@ -1,6 +1,6 @@
 import {BaseCommand} from '../../baseCommand'
 import ConfigSet from './set'
-import {bold} from 'chalk'
+import chalk from 'chalk'
 
 export default class Config extends BaseCommand<any> {
   static description = 'Get/Set configuration'
@@ -10,7 +10,8 @@ export default class Config extends BaseCommand<any> {
     for (const key in ConfigSet.flags) {
       this.log(`  ${key}: ${this.globalFlags[key]}`)
     }
+
     this.log('\nFor details run\n' +
-      bold('$') + ' ra-protocol config set --help')
+      chalk.bold('$') + ' ra-protocol config set --help')
   }
 }
