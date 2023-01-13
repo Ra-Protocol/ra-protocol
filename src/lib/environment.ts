@@ -3,12 +3,14 @@ import {Provider} from '@ethersproject/providers'
 import {ethers} from 'ethers'
 import {
   validateChainSupported,
-  validateCliVersion,
+  validateCliVersion, validateError,
   validateWalletKey,
 } from './validate/environment'
 import getWalletKey from './wallet-key'
 import {getNetworks} from './constants/constants'
 import {Contract} from '@ethersproject/contracts/lib'
+import {JsonRpcProvider, JsonRpcSigner} from '@ethersproject/providers'
+import chalk from 'chalk'
 
 export type environment = {
   requiresNoGas: boolean,
@@ -22,8 +24,9 @@ export type environment = {
     rpc: string,
     explorer: string,
     networkId: number,
-    provider: Provider,
-    managedSigner: NonceManager,
+    provider: Provider | JsonRpcProvider,
+    managedSigner: NonceManager | JsonRpcSigner,
+    useDashboard: boolean
     useWrapper: boolean
     account: {
       address: string
@@ -38,8 +41,10 @@ export type environment = {
 const buildNetwork = (env: environment) => {
   env.network = {
     useWrapper: false,
+    useDashboard: false,
   } as any
   const networks = getNetworks(env)
+  env.network.useDashboard = env.globalFlags.dashboard === 'on'
   env.network.type = env.flags.mainnet ? 'mainnet' : 'testnet'
   if (env.network.type === 'mainnet') throw new Error('mainnet operations are currently disabled for security upgrades')
   env.network.slug = env.flags.chain
@@ -52,17 +57,26 @@ const buildNetwork = (env: environment) => {
 
 const buildAccount = async (env: environment) => {
   env.network.account = {} as any
-  env.network.account.address = await env.network.managedSigner.getAddress()
+  env.network.account.address = await env.network.managedSigner.getAddress().catch(validateError)
   env.network.account.balance = await env.network.provider.getBalance(env.network.account.address)
   console.log(`Using wallet ${env.network.account.address} on network ${env.network.slug} ${env.network.type}`)
 }
 
 const buildSigner = async (env: environment) => {
-  await validateWalletKey()
-  env.network.provider = ethers.getDefaultProvider(env.network.rpc)
-  const walletKey = await getWalletKey()
-  const signer = new ethers.Wallet(walletKey as string, env.network.provider)
-  env.network.managedSigner = new NonceManager(signer)
+  if (env.network.useDashboard) {
+    env.network.provider = new ethers.providers.JsonRpcProvider('http://localhost:24012/rpc')
+    env.network.managedSigner = (env.network.provider as JsonRpcProvider).getSigner()
+    const {chainId} = await env.network.provider.getNetwork()
+    if (chainId !== env.network.networkId) {
+      throw new Error(`Truffle Dashboard reports you forgot to switch your wallet to ${chalk.bold(env.network.slug)} ${chalk.bold(env.network.type)}`)
+    }
+  } else {
+    await validateWalletKey()
+    env.network.provider = ethers.getDefaultProvider(env.network.rpc)
+    const walletKey = await getWalletKey()
+    const signer = new ethers.Wallet(walletKey as string, env.network.provider)
+    env.network.managedSigner = new NonceManager(signer)
+  }
 }
 
 const buildProtocols = (env: environment) => {

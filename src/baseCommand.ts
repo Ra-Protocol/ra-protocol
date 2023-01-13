@@ -45,8 +45,8 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
 
   protected risksConsent = async () => {
     this.error('mainnet operations are currently disabled for security upgrades')
-    const yesAnswer = 'Yes, I am willing to loose funds'
-    const noAnswer = 'No, I am NOT willing to loose funds'
+    const yesAnswer = 'Yes, I am willing to lose funds'
+    const noAnswer = 'No, I am NOT willing to lose funds'
     const question = await new Select({
       choices: [noAnswer, yesAnswer],
       message: 'This is beta. On mainnet only use funds you`re willing to lose!',
@@ -73,6 +73,18 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
       await axios.get(url.href).catch(this.processApiError)
       if (this.gotError) return
       this.globalFlags['ra-key'] = answer.key
+      this.saveConfig()
+    }
+
+    if (!this.globalFlags.dashboard) {
+      const yesAnswer = 'Yes, I am not willing to lose funds'
+      const noAnswer = 'No, I want to paste my wallet private key, and I AM willing to LOSE FUNDS'
+      const question = await new Select({
+        choices: [yesAnswer, noAnswer],
+        message: 'Do you want to use Truffle Dashboard for signing your transactions to avoid exposing your wallet private key?',
+      })
+      const answer = await question.run()
+      this.globalFlags.dashboard = answer === yesAnswer ? 'on' : 'off'
       this.saveConfig()
     }
 

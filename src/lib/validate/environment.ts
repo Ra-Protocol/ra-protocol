@@ -50,6 +50,14 @@ export const validateError = (error: any) => {
     'execution reverted: SafeERC20: low-level call failed': 'Missing arbitrage opportunity on selected assets',
   }
 
+  if (error.reason === 'missing response' && error.url === 'http://localhost:24012/rpc') {
+    throw new Error(`Truffle Dashboard is not running.\nInstall with ${bold('npm install -g truffle')}\nRun with ${bold('truffle dashboard')}\nRead manual at https://trufflesuite.com/blog/introducing-truffle-dashboard`)
+  }
+
+  if (error.reason === 'user rejected transaction' || error.error.message === 'Message rejected by user') {
+    throw new Error('You declined transaction')
+  }
+
   if (Object.keys(explanation).includes(error?.error?.error?.error?.message)) {
     throw new Error(explanation[error?.error?.error?.error?.message])
   }

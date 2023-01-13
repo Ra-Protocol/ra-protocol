@@ -6,7 +6,6 @@ import {buildEnvironment, environment} from '../../lib/environment'
 import {callFlashLoan, deployArbitrageContract, maybeCallSetTokenAddresses} from '../../lib/ethers/quickflash'
 import {validateAmount, validateAssets, validateChainSupported} from '../../lib/validate/quickflash'
 import {exploreContract, exploreTransaction} from '../../lib/ethers/common'
-import {validateError} from '../../lib/validate/environment'
 import ArbV2 from '../../lib/constants/contracts/AaveV2UniV2/ArbV2.json'
 import ArbV3 from '../../lib/constants/contracts/AaveV3UniV2/ArbV3.json'
 
@@ -58,12 +57,12 @@ https://goerli.etherscan.io/tx/0x3147a6030f188b50850f01417788090a22674dc65ce4833
 
     env.contracts.loanContract = new ethers.Contract(contractAddress, env.network.protocols.aave === 'v2' ? ArbV2 : ArbV3, env.network.managedSigner)
 
-    const setTokenAddressesHash = await maybeCallSetTokenAddresses(env).catch(validateError)
+    const setTokenAddressesHash = await maybeCallSetTokenAddresses(env)
     if (setTokenAddressesHash) {
       this.log(exploreTransaction(env, setTokenAddressesHash))
     }
 
-    const flashLoanHash = await callFlashLoan(env).catch(validateError)
+    const flashLoanHash = await callFlashLoan(env)
     if (flashLoanHash) {
       this.log(exploreTransaction(env, flashLoanHash))
     }

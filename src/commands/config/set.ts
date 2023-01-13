@@ -30,6 +30,7 @@ Configuration updated
         'protocol-uni',
         'privacy',
         'ra-key',
+        'dashboard',
         'simulate',
         'infura-key',
         'tenderly-key',
@@ -49,6 +50,13 @@ Configuration updated
       options: [
         'pub',
         'secret',
+      ],
+    }),
+    dashboard: Flags.enum({
+      description: 'Use truffle dashboard to sign transactions',
+      options: [
+        'on',
+        'off',
       ],
     }),
     simulate: Flags.enum({
@@ -110,7 +118,7 @@ Configuration updated
     if (changed) {
       this.log('Configuration updated')
     } else {
-      this.warn(`Configuration unchanged, ${key} value is already "${flags[key]}"`)
+      this.warn(`Configuration not changed, ${key} value is already "${flags[key]}"`)
     }
   }
 }

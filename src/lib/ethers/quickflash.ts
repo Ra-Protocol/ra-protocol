@@ -3,15 +3,17 @@ import {constructorParams, getArbFactoryAddress, tokens} from '../constants/cons
 import {animateContractCreationTransaction, animateTransaction} from './common'
 import ArbFactory from '../constants/contracts/ArbFactory.json'
 import {environment} from '../environment'
+import {validateError} from '../validate/environment'
 
 export const deployArbitrageContract = async (env: environment) => {
   const factoryContract = new ethers.Contract(getArbFactoryAddress(env), ArbFactory.abi, env.network.managedSigner)
   const params = (ArbFactory.params as constructorParams)[env.network.slug][env.network.type][env.network.protocols.aave]
   return animateContractCreationTransaction(
+    env,
     factoryContract,
     env.network.protocols.aave === 'v2' ? 'createArbV2Contract' : 'createArbV3Contract',
     params,
-  )
+  ).catch(validateError)
 }
 
 export const maybeCallSetTokenAddresses = async (env: environment) => {
@@ -26,6 +28,7 @@ export const maybeCallSetTokenAddresses = async (env: environment) => {
   }
 
   return animateTransaction(
+    env,
     'Calling setTokenAddresses',
     'Contract token addresses updated',
     env.contracts.loanContract,
@@ -34,16 +37,17 @@ export const maybeCallSetTokenAddresses = async (env: environment) => {
       networkTokens[asset1],
       networkTokens[asset2],
     ],
-  )
+  ).catch(validateError)
 }
 
 export const callFlashLoan = async (env: environment) => {
   return animateTransaction(
+    env,
     'Calling flashloan',
     'Flashloan is complete',
     env.contracts.loanContract,
     'flashloan',
     [env.flags.amount],
-  )
+  ).catch(validateError)
 }
 
