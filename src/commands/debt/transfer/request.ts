@@ -1,20 +1,18 @@
 import {BaseCommand} from '../../../baseCommand'
-import getWalletKey from '../../../lib/wallet-key'
-import {chain, mainnet, redeploy} from '../../../flags'
-import axios from 'axios'
+import {chain, mainnet} from '../../../flags'
 import {Flags} from '@oclif/core'
+import {buildEnvironment, environment} from '../../../lib/environment'
+import {deployDelegatorDebtTransferContract} from '../../../lib/ethers/debt/transfer/request'
 
 export default class DebtTransferRequest extends BaseCommand<any> {
   static description = 'Send debt transfer request to a user'
 
   static examples = [
-    `$ ra-protocol debt transfer request --chain arbitrum --loan 0xE0F70c5BB5a2f37983312aF9314D47175028f36c
+    `$ ra-protocol debt transfer request --chain arbitrum --loan 0x0B39CBc3AE31f999d0418fc7FF0D4817A943B898
+Using wallet 0xC443c9515916Cb698a2628A63C252BADf84BC961 on network arbitrum testnet
+Contract deployed at https://goerli.arbiscan.io/address/0xe70Dc260ecD3e333E85B7fC3E5aa826E4935bfd8
 {
-  contract: {
-    address: '0xf9D85AC95E532C7B66D14F50B2716ff20807c78C',
-    explore: 'https://goerli.arbiscan.io/address/0xf9D85AC95E532C7B66D14F50B2716ff20807c78C'
-  },
-  transferRequest: { loan: '0xE0F70c5BB5a2f37983312aF9314D47175028f48c', sent: true }
+  transferRequest: { loan: '0x0B39CBc3AE31f999d0418fc7FF0D4817A943B898', sent: true }
 }
 Request is sent
 `,
@@ -23,7 +21,6 @@ Request is sent
   static flags = {
     chain,
     mainnet,
-    redeploy,
     loan: Flags.string({
       description: 'loan address',
       required: true,
@@ -31,14 +28,10 @@ Request is sent
   }
 
   async run(): Promise<void> {
+    const env: environment = {} as any
     const {flags} = await this.parse(DebtTransferRequest)
-    const walletKey = await getWalletKey()
-    const params: {
-      [key: string]: any,
-    } = {
-      cli: this.config.version,
-      raApiKey: this.globalFlags['ra-key'],
-      walletKey: walletKey,
+    await buildEnvironment(env, flags, this.globalFlags, this.invisibleFlags)
+    const params: { [key: string]: any } = {
       chain: flags.chain,
       'protocol-aave': this.globalFlags['protocol-aave'],
       loan: flags.loan,
@@ -46,21 +39,18 @@ Request is sent
 
     if (flags.mainnet) {
       await this.risksConsent()
-      params.mainnet = true
     }
 
-    const url = new URL(this.invisibleFlags['api-url'] + '/debt/transfer/request')
-    url.search = new URLSearchParams(params as keyof unknown).toString()
-
-    const response = await axios.get(url.href).catch(this.processApiError) as any
-    if (this.gotError) return
-
-    if (response) {
+    const checkResponse = await this.callApi('/debt/transfer/request', params) // throws error if request already exists
+    if (JSON.stringify(checkResponse.data) === '{}') {
+      const contractAddress = await deployDelegatorDebtTransferContract(env)
+      const response = await this.callApi('/debt/transfer/request', {
+        ...params,
+        contract: contractAddress,
+      })
       this.log(response.data)
     }
 
-    if (!this.gotError) {
-      this.log('Request is sent')
-    }
+    this.log('Request is sent')
   }
 }

@@ -1,19 +1,19 @@
 import {BaseCommand} from '../../baseCommand'
 import {asset, chain, mainnet, amount, collateral} from '../../flags'
 import {Flags} from '@oclif/core'
-import {approveERC20} from '../../lib/ethers/common'
-import {buildEnvironment, environment} from '../../lib/environment'
 import {
   approveBorrower,
-  deployDelegatorContract,
+  approveERC20,
   depositCoinAsCollateral,
   depositCollateral,
-} from '../../lib/ethers/debt/delegate'
+  getBorrowingLimit,
+} from '../../lib/ethers/common'
+import {buildEnvironment, environment} from '../../lib/environment'
+import {deployDelegatorContract} from '../../lib/ethers/debt/delegate'
 import {ethers} from 'ethers'
 import DelegatorV2 from '../../lib/constants/contracts/AaveV2UniV2/DelegatorV2.json'
 import DelegatorV3 from '../../lib/constants/contracts/AaveV3UniV2/DelegatorV3.json'
 import {validateAmount, validateAsset, validateCollateral} from '../../lib/validate/environment'
-import {valueToBigNumber} from '../../lib/bignumber'
 
 export default class DebtDelegate extends BaseCommand<any> {
   static description = 'approve borrow request (delegate borrowing power request to a user)'
@@ -74,18 +74,17 @@ Credit delegation is approved
     env.contracts.delegateContract = new ethers.Contract(delegateContractAddress, env.network.protocols.aave === 'v2' ? DelegatorV2 : DelegatorV3, env.network.managedSigner)
 
     if (env.network.useWrapper) {
-      await depositCoinAsCollateral(env, amount)
+      await depositCoinAsCollateral(env, env.contracts.delegateContract, amount)
     } else {
       await approveERC20(env, collateralToken, delegateContractAddress, amount)
-      await depositCollateral(env)
+      await depositCollateral(env, env.contracts.delegateContract, amount)
     }
 
-    const userAccountData = await env.contracts.delegateContract.getUserAccountData(delegateContractAddress)
-    const assetPrice = await env.contracts.delegateContract.getAssetPrice(borrowToken)
-    const availableToBorrow = ethers.utils.parseUnits(valueToBigNumber(userAccountData.availableBorrowsETH.toString()).div(assetPrice.toString()).toFixed(borrowTokenDecimals), borrowTokenDecimals)
+    const availableToBorrow = await getBorrowingLimit(env, env.contracts.delegateContract, delegateContractAddress)
     console.log(`Available to borrow: ${ethers.utils.formatUnits(availableToBorrow, borrowTokenDecimals)} ${flags.asset}`)
 
     await approveBorrower(env,
+      env.contracts.delegateContract,
       borrowContractAddress,
       borrowToken,
       availableToBorrow,

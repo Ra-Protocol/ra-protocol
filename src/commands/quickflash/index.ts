@@ -14,12 +14,10 @@ export default class Quickflash extends BaseCommand<any> {
   static examples = [
     `$ ra-protocol quickflash --chain ethereum --asset DAI --asset USDC --amount 1000000000000000000
 Using wallet 0x85b4BCB925E5EBDe5d8509Fc22F0A850E03470dA on network ethereum testnet
-Contract deployed
-https://goerli.etherscan.io/address/0xab81938A2Cce68e455cbB5c27C2010a4f7B1ffb5
-Contract token addresses updated
-https://goerli.etherscan.io/tx/0x431d534a4f04f6ffd1d9a06ed61e3d0ea06882fefc7cccaccc1c98d3c4f6f687
+Contract deployed at https://goerli.etherscan.io/address/0xab81938A2Cce68e455cbB5c27C2010a4f7B1ffb5
+Called setTokenAddresses at https://goerli.etherscan.io/tx/0x431d534a4f04f6ffd1d9a06ed61e3d0ea06882fefc7cccaccc1c98d3c4f6f687
+Called flashloan at https://goerli.etherscan.io/tx/0x3147a6030f188b50850f01417788090a22674dc65ce48332d56d465fb49c0ad1
 Flashloan is complete
-https://goerli.etherscan.io/tx/0x3147a6030f188b50850f01417788090a22674dc65ce48332d56d465fb49c0ad1
 `,
   ]
 
@@ -27,7 +25,7 @@ https://goerli.etherscan.io/tx/0x3147a6030f188b50850f01417788090a22674dc65ce4833
     chain,
     mainnet,
     redeploy,
-    masset,
+    asset: masset,
     amount,
   }
 
@@ -56,5 +54,7 @@ https://goerli.etherscan.io/tx/0x3147a6030f188b50850f01417788090a22674dc65ce4833
     env.contracts.loanContract = new ethers.Contract(contractAddress, env.network.protocols.aave === 'v2' ? ArbV2 : ArbV3, env.network.managedSigner)
     await maybeCallSetTokenAddresses(env)
     await callFlashLoan(env)
+
+    this.log('Flashloan is complete')
   }
 }

@@ -1,9 +1,11 @@
 import {environment, getTokenName} from '../environment'
 import {Contract} from '@ethersproject/contracts'
 import ora, {Ora} from 'ora'
-import {ethers} from 'ethers'
-import {validateError} from '../validate/environment'
+import {BigNumber, ethers} from 'ethers'
+import {validateAsset, validateError} from '../validate/environment'
 import ERC20 from '../constants/contracts/ERC20.json'
+import {tokens} from '../constants/constants'
+import {valueToBigNumber} from '../bignumber'
 
 export const exploreContract = (env: environment, address: string) => `${env.network.explorer}/address/${address}`
 
@@ -80,4 +82,54 @@ export const approveERC20 = async (
     `Calling ERC20 approve for ${tokenName}`,
     `Got ERC20 approval for ${tokenName} transfer`,
   ).catch(validateError)
+}
+
+export const depositCoinAsCollateral = async (env: environment, contract: Contract, amount: string) => {
+  return animateTransaction(
+    env,
+    contract,
+    'depositCoinAsCollateral',
+    [{
+      value: amount,
+    }],
+  ).catch(validateError)
+}
+
+export const depositCollateral = async (env: environment, contract: Contract, amount: string) => {
+  const networkTokens = tokens[env.network.slug][env.network.type][env.network.protocols.aave]
+  return animateTransaction(
+    env,
+    contract,
+    'depositCollateral',
+    [
+      networkTokens[env.flags.collateral],
+      amount,
+    ],
+  ).catch(validateError)
+}
+
+export const approveBorrower = async (
+  env: environment,
+  contract: Contract,
+  borrowerAddress: string,
+  borrowToken: string,
+  availableToBorrow: BigNumber,
+) => {
+  return animateTransaction(
+    env,
+    contract,
+    'approveBorrower',
+    [
+      borrowerAddress,
+      borrowToken,
+      availableToBorrow,
+    ],
+  ).catch(validateError)
+}
+
+export const getBorrowingLimit = async (env: environment, contract: Contract, borrowerAddress: string) => {
+  const [borrowToken, borrowTokenDecimals] = validateAsset(env)
+  const userAccountData = await contract.getUserAccountData(borrowerAddress)
+  const assetPrice = await contract.getAssetPrice(borrowToken)
+  return ethers.utils.parseUnits(valueToBigNumber(userAccountData.availableBorrowsETH.toString()).div(assetPrice.toString()).toFixed(borrowTokenDecimals), borrowTokenDecimals)
 }

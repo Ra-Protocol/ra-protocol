@@ -10,8 +10,7 @@ export default class DebtRequest extends BaseCommand<any> {
   static examples = [
     `$ ra-protocol debt request --chain arbitrum --lender lender@gmail.com
 Using wallet 0x26811622A429E51370Df573c2dBD695242a878e7 on network arbitrum testnet
-Contract deployed
-https://goerli.arbiscan.io/address/0x0B39CBc3AE31f999d0418fc7FF0D4817A943B898
+Contract deployed at https://goerli.arbiscan.io/address/0x0B39CBc3AE31f999d0418fc7FF0D4817A943B898
 { request: { lender: 'dmitry.matora@gmail.com', sent: true } }
 Request is sent
 `,

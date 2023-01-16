@@ -3,11 +3,11 @@ import {tokens} from '../constants/constants'
 import {ethers} from 'ethers'
 
 export const validateAssets = (env: environment) => {
-  if (env.flags.masset.length !== 2) {
+  if (env.flags.asset.length !== 2) {
     return 'two assets are required'
   }
 
-  for (const asset of env.flags.masset) {
+  for (const asset of env.flags.asset) {
     if (!Object.keys(tokens[env.network.slug][env.network.type][env.network.protocols.aave]).includes(asset) && !ethers.utils.isAddress(asset)) {
       const supportedTokens = Object.keys(tokens[env.network.slug][env.network.type][env.network.protocols.aave]).join(', ')
       return `${asset} is not on the list of known tokens (${supportedTokens}) for ${env.network.slug} ${env.network.type}`

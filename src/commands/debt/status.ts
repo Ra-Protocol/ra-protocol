@@ -1,5 +1,4 @@
 import {BaseCommand} from '../../baseCommand'
-import getWalletKey from '../../lib/wallet-key'
 import {chain, mainnet} from '../../flags'
 import {buildEnvironment, environment} from '../../lib/environment'
 

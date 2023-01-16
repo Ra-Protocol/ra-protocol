@@ -12,7 +12,7 @@ export default class DebtRepay extends BaseCommand<any> {
   static examples = [
     `$ ra-protocol debt repay --chain arbitrum --lender lender@gmail.com --asset DAI --amount 1
 Using wallet 0x26811622A429E51370Df573c2dBD695242a878e7 on network arbitrum testnet
-ERC20 approved
+Got ERC20 approval for DAI transfer
 Called repayDelegator at https://goerli.arbiscan.io/tx/0xaa0cc751c5b2325213f0449ba5256b585cc43a86c3fa5d921600873dc7fb3df1
 `,
   ]
