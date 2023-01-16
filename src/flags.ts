@@ -13,13 +13,17 @@ export const chain = Flags.enum({
 
 export const collateral = Flags.string({
   description: 'specify collateral',
+  required: true,
+})
+
+export const masset = Flags.string({
+  description: 'specify asset',
   multiple: true,
   required: true,
 })
 
 export const asset = Flags.string({
   description: 'specify asset',
-  multiple: true,
   required: true,
 })
 

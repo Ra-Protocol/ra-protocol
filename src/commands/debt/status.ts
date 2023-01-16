@@ -1,7 +1,7 @@
 import {BaseCommand} from '../../baseCommand'
 import getWalletKey from '../../lib/wallet-key'
 import {chain, mainnet} from '../../flags'
-import axios from 'axios'
+import {buildEnvironment, environment} from '../../lib/environment'
 
 export default class DebtStatus extends BaseCommand<any> {
   static description = 'approve borrow request (delegate borrowing power request to a user)'
@@ -19,27 +19,19 @@ Your balance of debt to lender@gmail.com:
   }
 
   async run(): Promise<void> {
+    const env: environment = {} as any
     const {flags} = await this.parse(DebtStatus)
-    const walletKey = await getWalletKey()
-    const params: {
-      [key: string]: any,
-    } = {
-      cli: this.config.version,
-      raApiKey: this.globalFlags['ra-key'],
-      walletKey: walletKey,
+    await buildEnvironment(env, flags, this.globalFlags, this.invisibleFlags)
+    const params: { [key: string]: any } = {
       chain: flags.chain,
       'protocol-aave': this.globalFlags['protocol-aave'],
     }
 
     if (flags.mainnet) {
       await this.risksConsent()
-      params.mainnet = true
     }
 
-    const url = new URL(this.invisibleFlags['api-url'] + '/debt/status')
-    url.search = new URLSearchParams(params as keyof unknown).toString()
-
-    const response = await axios.get(url.href).catch(this.processApiError) as any
+    const response = await this.callApi('/debt/status', params)
     if (this.gotError) return
 
     if (response && response.data.requests) {

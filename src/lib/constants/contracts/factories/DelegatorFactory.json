@@ -1,0 +1,197 @@
+{
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "aaveAddressProvider",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "dataProvider",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "gateway",
+          "type": "address"
+        }
+      ],
+      "name": "createDelegatorV2Contract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "aaveAddressProvider",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "dataProvider",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "gateway",
+          "type": "address"
+        }
+      ],
+      "name": "createDelegatorV3Contract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "delegatorV2ContractList",
+      "outputs": [
+        {
+          "internalType": "contract DelegatorV2",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "delegatorV3ContractList",
+      "outputs": [
+        {
+          "internalType": "contract DelegatorV3",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "expirationDate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getUserDelegatorV2Contracts",
+      "outputs": [
+        {
+          "internalType": "contract DelegatorV2[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getUserDelegatorV3Contracts",
+      "outputs": [
+        {
+          "internalType": "contract DelegatorV3[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "params": {
+    "arbitrum": {
+      "testnet": {
+        "v3": [
+          "0xF8aa90E66B8BAe13f2e4aDe6104abAb8eeDaBfdc",
+          "0xce3Aa85237C075d2102b7B35079d305307D745C8",
+          "0xBCca2fc5F30A65cE2155d739364f3fc8F57E6999"
+        ]
+      },
+      "mainnet": {
+        "v3": [
+          "0xa97684ead0e402dC232d5A977953DF7ECBaB3CDb",
+          "0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654",
+          "0xB5Ee21786D28c5Ba61661550879475976B707099"
+        ]
+      }
+    },
+    "avalanche": {
+      "testnet": {
+        "v2": [
+          "0x7fdC1FdF79BE3309bf82f4abdAD9f111A6590C0f",
+          "0x0668EDE013c1c475724523409b8B6bE633469585",
+          "0x1648C14DbB6ccdd5846969cE23DeEC4C66a03335"
+        ],
+        "v3": [
+          "0x1775ECC8362dB6CaB0c7A9C0957cF656A5276c29",
+          "0x8e0988b28f9CdDe0134A206dfF94111578498C63",
+          "0x8f57153F18b7273f9A814b93b31Cb3f9b035e7C2"
+        ]
+      },
+      "mainnet": {
+        "v2": [
+          "0xb6A86025F0FE1862B372cb0ca18CE3EDe02A318f",
+          "0x65285E9dfab318f57051ab2b139ccCf232945451",
+          "0xC27d4dBefc2C0CE57916a699971b58a3BD9C7d5b"
+        ],
+        "v3": [
+          "0xa97684ead0e402dC232d5A977953DF7ECBaB3CDb",
+          "0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654",
+          "0x6F143FE2F7B02424ad3CaD1593D6f36c0Aab69d7"
+        ]
+      }
+    },
+    "ethereum": {
+      "testnet": {
+        "v2": [
+          "0x5E52dEc931FFb32f609681B8438A51c675cc232d",
+          "0x927F584d4321C1dCcBf5e2902368124b02419a1E",
+          "0x3bd3a20Ac9Ff1dda1D99C0dFCE6D65C4960B3627"
+        ],
+        "v3": [
+          "0xc4dCB5126a3AfEd129BC3668Ea19285A9f56D15D",
+          "0x9BE876c6DC42215B00d7efe892E2691C3bc35d10",
+          "0xd5B55D3Ed89FDa19124ceB5baB620328287b915d"
+        ]
+      },
+      "mainnet": {
+        "v2": [
+          "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5",
+          "0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d",
+          "0xEFFC18fC3b7eb8E676dac549E0c693ad50D1Ce31"
+        ]
+      }
+    }
+  }
+}

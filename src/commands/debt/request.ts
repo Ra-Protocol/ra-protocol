@@ -1,21 +1,18 @@
 import {BaseCommand} from '../../baseCommand'
-import getWalletKey from '../../lib/wallet-key'
-import {chain, mainnet, redeploy} from '../../flags'
-import axios from 'axios'
+import {chain, mainnet} from '../../flags'
 import {Flags} from '@oclif/core'
+import {buildEnvironment, environment} from '../../lib/environment'
+import {deployBorrowerContract} from '../../lib/ethers/debt/request'
 
 export default class DebtRequest extends BaseCommand<any> {
   static description = 'Send loan request to a user'
 
   static examples = [
     `$ ra-protocol debt request --chain arbitrum --lender lender@gmail.com
-{
-  contract: {
-    address: '0x606a344B991635a112222111b5a27fcDd2b15BA1',
-    explore: 'https://goerli.arbiscan.io/address/0x606a344B991635a112222111b5a27fcDd2b15BA1'
-  },
-  request: { lender: 'lender@gmail.com', sent: true }
-}
+Using wallet 0x26811622A429E51370Df573c2dBD695242a878e7 on network arbitrum testnet
+Contract deployed
+https://goerli.arbiscan.io/address/0x0B39CBc3AE31f999d0418fc7FF0D4817A943B898
+{ request: { lender: 'dmitry.matora@gmail.com', sent: true } }
 Request is sent
 `,
   ]
@@ -23,11 +20,6 @@ Request is sent
   static flags = {
     chain,
     mainnet,
-    redeploy,
-    transferable: Flags.boolean({
-      char: 't',
-      description: 'enable debt transfer support (experemental)',
-    }),
     lender: Flags.string({
       description: 'email of lender',
       required: true,
@@ -35,14 +27,10 @@ Request is sent
   }
 
   async run(): Promise<void> {
+    const env: environment = {} as any
     const {flags} = await this.parse(DebtRequest)
-    const walletKey = await getWalletKey()
-    const params: {
-      [key: string]: any,
-    } = {
-      cli: this.config.version,
-      raApiKey: this.globalFlags['ra-key'],
-      walletKey: walletKey,
+    await buildEnvironment(env, flags, this.globalFlags, this.invisibleFlags)
+    const params: { [key: string]: any } = {
       chain: flags.chain,
       'protocol-aave': this.globalFlags['protocol-aave'],
       lender: flags.lender,
@@ -50,29 +38,18 @@ Request is sent
 
     if (flags.mainnet) {
       await this.risksConsent()
-      params.mainnet = true
     }
 
-    if (flags.transferable) {
-      params.transferable = true
-    }
-
-    if (flags.redeploy) {
-      params.redeploy = true
-    }
-
-    const url = new URL(this.invisibleFlags['api-url'] + '/debt/request')
-    url.search = new URLSearchParams(params as keyof unknown).toString()
-
-    const response = await axios.get(url.href).catch(this.processApiError) as any
-    if (this.gotError) return
-
-    if (response) {
+    const checkResponse = await this.callApi('/debt/request', params) // throws error if request already exists
+    if (JSON.stringify(checkResponse.data) === '{}') {
+      const contractAddress = await deployBorrowerContract(env)
+      const response = await this.callApi('/debt/request', {
+        ...params,
+        contract: contractAddress,
+      })
       this.log(response.data)
     }
 
-    if (!this.gotError) {
-      this.log('Request is sent')
-    }
+    this.log('Request is sent')
   }
 }

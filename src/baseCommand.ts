@@ -7,6 +7,8 @@ import axios from 'axios'
 export type Flags<T extends typeof Command> = Interfaces.InferredFlags<typeof BaseCommand['globalFlags'] & T['flags']>
 
 export abstract class BaseCommand<T extends typeof Command> extends Command {
+  protected dev = false
+
   protected globalFlags: any
 
   protected invisibleFlags: any
@@ -147,6 +149,18 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
     }
   }
 
+  protected callApi = async (path: string, params: any) => {
+    const url = new URL(this.invisibleFlags['api-url'] + path)
+    const paramsExtended = {
+      cli: this.config.version,
+      raApiKey: this.globalFlags['ra-key'],
+      ...params,
+    }
+    url.search = new URLSearchParams(paramsExtended as keyof unknown).toString()
+    if (this.dev) this.log(url.href)
+    return axios.get(url.href).catch(this.processApiError) as any
+  }
+
   protected processApiError = (error: any) => {
     this.gotError = true
     if (error.response) {
@@ -174,6 +188,7 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
   }
 
   public async init(): Promise<void> {
+    this.dev = this.config.options.root.endsWith('dev')
     this.globalFlags = this.readConfig()
     this.invisibleFlags = this.readInvisibleConfig()
     this.storage = this.readStorage()

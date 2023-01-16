@@ -1,11 +1,10 @@
 import {BaseCommand} from '../../baseCommand'
 import {ethers} from 'ethers'
 import * as _ from 'lodash'
-import {asset, chain, mainnet, redeploy, amount} from '../../flags'
+import {masset, chain, mainnet, redeploy, amount} from '../../flags'
 import {buildEnvironment, environment} from '../../lib/environment'
 import {callFlashLoan, deployArbitrageContract, maybeCallSetTokenAddresses} from '../../lib/ethers/quickflash'
 import {validateAmount, validateAssets, validateChainSupported} from '../../lib/validate/quickflash'
-import {exploreContract, exploreTransaction} from '../../lib/ethers/common'
 import ArbV2 from '../../lib/constants/contracts/AaveV2UniV2/ArbV2.json'
 import ArbV3 from '../../lib/constants/contracts/AaveV3UniV2/ArbV3.json'
 
@@ -28,7 +27,7 @@ https://goerli.etherscan.io/tx/0x3147a6030f188b50850f01417788090a22674dc65ce4833
     chain,
     mainnet,
     redeploy,
-    asset,
+    masset,
     amount,
   }
 
@@ -50,21 +49,12 @@ https://goerli.etherscan.io/tx/0x3147a6030f188b50850f01417788090a22674dc65ce4833
       contractAddress = await deployArbitrageContract(env)
       _.set(this.storage, `contract.${flags.chain}.aave-${this.globalFlags['protocol-aave']}.uni-${this.globalFlags['protocol-uni']}`, contractAddress)
       this.saveStorage()
-      this.log(exploreContract(env, contractAddress))
     } else {
       this.log(`Reusing contract ${contractAddress}`)
     }
 
     env.contracts.loanContract = new ethers.Contract(contractAddress, env.network.protocols.aave === 'v2' ? ArbV2 : ArbV3, env.network.managedSigner)
-
-    const setTokenAddressesHash = await maybeCallSetTokenAddresses(env)
-    if (setTokenAddressesHash) {
-      this.log(exploreTransaction(env, setTokenAddressesHash))
-    }
-
-    const flashLoanHash = await callFlashLoan(env)
-    if (flashLoanHash) {
-      this.log(exploreTransaction(env, flashLoanHash))
-    }
+    await maybeCallSetTokenAddresses(env)
+    await callFlashLoan(env)
   }
 }

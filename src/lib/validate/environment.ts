@@ -1,8 +1,8 @@
 import {ethers} from 'ethers'
 import axios from 'axios'
-import {getNetworks} from '../constants/constants'
+import {coins, getNetworks, tokens} from '../constants/constants'
 import getWalletKey from '../wallet-key'
-import {environment} from '../environment'
+import {environment, getDecimalsByTokenAddress} from '../environment'
 import chalk from 'chalk'
 
 const processApiError = (error: any) => {
@@ -54,7 +54,7 @@ export const validateError = (error: any) => {
     throw new Error(`Truffle Dashboard is not running.\nInstall with ${bold('npm install -g truffle')}\nRun with ${bold('truffle dashboard')}\nRead manual at https://trufflesuite.com/blog/introducing-truffle-dashboard`)
   }
 
-  if (error.reason === 'user rejected transaction' || error.error.message === 'Message rejected by user') {
+  if (error.reason === 'user rejected transaction' || error.error?.message === 'Message rejected by user') {
     throw new Error('You declined transaction')
   }
 
@@ -79,4 +79,43 @@ export const validateChainSupported = (env: environment) => {
     throw new Error('Working with ethereum network requires setting infura key. For details run\n' +
       chalk.bold('ra-protocol config set --help'))
   }
+}
+
+export const validateCollateral = (env: environment): [string, number] => {
+  let collateral = env.flags.collateral
+  if (Object.keys(coins).includes(collateral)) {
+    if (coins[collateral].includes(env.network.slug)) {
+      collateral = 'W' + collateral
+      env.network.useWrapper = true
+    } else {
+      throw new Error(`${collateral} is not supported on ${env.network.slug}`)
+    }
+  }
+
+  if (!Object.keys(tokens[env.network.slug][env.network.type][env.network.protocols.aave]).includes(collateral) && !ethers.utils.isAddress(collateral)) {
+    const supportedTokens = Object.keys(tokens[env.network.slug][env.network.type][env.network.protocols.aave]).join(', ')
+    throw new Error(`${collateral} is not on the list of known tokens (${supportedTokens}) for ${env.network.slug} ${env.network.type}`)
+  }
+
+  const token = tokens[env.network.slug][env.network.type][env.network.protocols.aave][collateral]
+  return [token, getDecimalsByTokenAddress(env, token)]
+}
+
+export const validateAsset = (env: environment): [string, number] => {
+  const asset = env.flags.asset
+  if (!Object.keys(tokens[env.network.slug][env.network.type][env.network.protocols.aave]).includes(asset) && !ethers.utils.isAddress(asset)) {
+    const supportedTokens = Object.keys(tokens[env.network.slug][env.network.type][env.network.protocols.aave]).join(', ')
+    throw new Error(`${asset} is not on the list of known tokens (${supportedTokens}) for ${env.network.slug} ${env.network.type}`)
+  }
+
+  const token = tokens[env.network.slug][env.network.type][env.network.protocols.aave][asset]
+  return [token, getDecimalsByTokenAddress(env, token)]
+}
+
+export const validateAmount = (env: environment, decimals: number) => {
+  if (Number.isNaN(env.flags.amount)) {
+    throw new TypeError('amount must be a number')
+  }
+
+  return ethers.utils.parseUnits(env.flags.amount, decimals).toString()
 }

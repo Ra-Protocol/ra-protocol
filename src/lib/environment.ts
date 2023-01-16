@@ -7,7 +7,7 @@ import {
   validateWalletKey,
 } from './validate/environment'
 import getWalletKey from './wallet-key'
-import {getNetworks} from './constants/constants'
+import {decimals, getNetworks, tokens} from './constants/constants'
 import {Contract} from '@ethersproject/contracts/lib'
 import {JsonRpcProvider, JsonRpcSigner} from '@ethersproject/providers'
 import chalk from 'chalk'
@@ -107,3 +107,20 @@ export const buildEnvironment = async (
   await buildAccount(env)
   validateBalance(env)
 }
+
+export const getTokenName = (
+  env: environment,
+  tokenAddress: string,
+) => {
+  const networkTokens = tokens[env.network.slug][env.network.type][env.network.protocols.aave]
+  return Object.keys(networkTokens).find(key => networkTokens[key] === tokenAddress) as string
+}
+
+export const getDecimalsByTokenAddress = (
+  env: environment,
+  tokenAddress: string,
+) => {
+  const tokenName = getTokenName(env, tokenAddress)
+  return decimals(tokenName)
+}
+

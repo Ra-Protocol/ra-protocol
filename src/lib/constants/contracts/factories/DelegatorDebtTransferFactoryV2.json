@@ -1,0 +1,103 @@
+{
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "aaveAddressProvider",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "dataProvider",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "gateway",
+          "type": "address"
+        }
+      ],
+      "name": "createDelegatorV2Contract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "delegatorV2ContractList",
+      "outputs": [
+        {
+          "internalType": "contract DelegatorDebtTransferV2",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "expirationDate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getUserDelegatorV2Contracts",
+      "outputs": [
+        {
+          "internalType": "contract DelegatorDebtTransferV2[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "params": {
+    "avalanche": {
+      "testnet": [
+        "0x7fdC1FdF79BE3309bf82f4abdAD9f111A6590C0f",
+        "0x0668EDE013c1c475724523409b8B6bE633469585",
+        "0x1648C14DbB6ccdd5846969cE23DeEC4C66a03335"
+      ],
+      "mainnet": [
+        "0xb6A86025F0FE1862B372cb0ca18CE3EDe02A318f",
+        "0x65285E9dfab318f57051ab2b139ccCf232945451",
+        "0xC27d4dBefc2C0CE57916a699971b58a3BD9C7d5b"
+      ]
+    },
+    "ethereum": {
+      "testnet": [
+        "0x5E52dEc931FFb32f609681B8438A51c675cc232d",
+        "0x927F584d4321C1dCcBf5e2902368124b02419a1E",
+        "0x3bd3a20Ac9Ff1dda1D99C0dFCE6D65C4960B3627"
+      ],
+      "mainnet": [
+        "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5",
+        "0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d",
+        "0xEFFC18fC3b7eb8E676dac549E0c693ad50D1Ce31"
+      ]
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "borrowerV3ContractList",
+      "outputs": [
+        {
+          "internalType": "contract BorrowerDebtTransferV3",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "aaveAddressProvider",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "dataProvider",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "gateway",
+          "type": "address"
+        }
+      ],
+      "name": "createBorrowerV3Contract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "expirationDate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getUserBorrowerV3Contracts",
+      "outputs": [
+        {
+          "internalType": "contract BorrowerDebtTransferV3[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "params": {
+    "avalanche": {
+      "testnet": [
+        "0x1775ECC8362dB6CaB0c7A9C0957cF656A5276c29",
+        "0x8e0988b28f9CdDe0134A206dfF94111578498C63",
+        "0x8f57153F18b7273f9A814b93b31Cb3f9b035e7C2"
+      ],
+      "mainnet": [
+        "0xa97684ead0e402dC232d5A977953DF7ECBaB3CDb",
+        "0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654",
+        "0x6F143FE2F7B02424ad3CaD1593D6f36c0Aab69d7"
+      ]
+    },
+    "arbitrum": {
+      "testnet": [
+        "0xF8aa90E66B8BAe13f2e4aDe6104abAb8eeDaBfdc",
+        "0xce3Aa85237C075d2102b7B35079d305307D745C8",
+        "0xBCca2fc5F30A65cE2155d739364f3fc8F57E6999"
+      ],
+      "mainnet": [
+        "0xa97684ead0e402dC232d5A977953DF7ECBaB3CDb",
+        "0x69FA688f1Dc47d4B5d8029D5a35FB7a548310654",
+        "0xB5Ee21786D28c5Ba61661550879475976B707099"
+      ]
+    },
+    "ethereum": {
+      "testnet": [
+        "0xc4dCB5126a3AfEd129BC3668Ea19285A9f56D15D",
+        "0x9BE876c6DC42215B00d7efe892E2691C3bc35d10",
+        "0xd5B55D3Ed89FDa19124ceB5baB620328287b915d"
+      ]
+    }
+  }
+}

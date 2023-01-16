@@ -1,8 +1,10 @@
 import {environment} from '../environment'
 
 type stringTree2levels = { [key: string]: { [key: string]: string } }
+type stringTree3levels = { [key: string]: { [key: string]: { [key: string]: string } } }
 
-export type constructorParams = { [key: string]: { [key: string]: { [key: string]: string[] } } }
+export type constructorParams2levels = { [key: string]: { [key: string]: string[] } }
+export type constructorParams3levels = { [key: string]: { [key: string]: { [key: string]: string[] } } }
 
 export const getArbFactoryAddress = (env: environment) => {
   const address: stringTree2levels = {
@@ -11,6 +13,81 @@ export const getArbFactoryAddress = (env: environment) => {
     },
     avalanche: {
       testnet: '0x2AbA532f841Ff89879b6AA3C52ACd068FF0d92C4',
+    },
+  }
+  return address[env.network.slug][env.network.type]
+}
+
+export const getBorrowerFactoryAddress = (env: environment) => {
+  const address: stringTree3levels = {
+    ethereum: {
+      v2: {
+        testnet: '0xB566e1d4B2161Baf85d61FFE119F2F7d93D5ff9E',
+      },
+      v3: {
+        testnet: '0xB566e1d4B2161Baf85d61FFE119F2F7d93D5ff9E',
+      },
+    },
+    arbitrum: {
+      v2: {
+        testnet: '0x577E72c8ca63F93D283379F2C741C79a2cCe0959',
+      },
+      v3: {
+        testnet: '0xfb7BeB790d55f36FFfeeC4AACaA757F5B28A46d2',
+      },
+    },
+    avalanche: {
+      v2: {
+        testnet: '0xb9352dB543FE0d583CEc8A54737A54dE06781E93',
+      },
+      v3: {
+        testnet: '0x6c8704B513b67E12F38c0d8036EfA1b8819f2563',
+      },
+    },
+  }
+  return address[env.network.slug][env.network.protocols.aave][env.network.type]
+}
+
+export const getDelegatorDebtTransferFactoryAddress = (env: environment) => {
+  const address: stringTree3levels = {
+    ethereum: {
+      v2: {
+        testnet: '0xF8a804eD886517aEE5B82ec3d3a9AFE5ef9A64ac',
+      },
+      v3: {
+        testnet: '0xC5496718Fe8Bf595d016842f6F08836d011Da248',
+      },
+    },
+    arbitrum: {
+      v2: {
+        testnet: '0xcC6FC2669DEEe32630A3F50D5D290E82A75C083A',
+      },
+      v3: {
+        testnet: '0xF936B0dFDb9021b72B444a72abFDe39cC5508313',
+      },
+    },
+    avalanche: {
+      v2: {
+        testnet: '0x0e0D4A6f4Db82E14fD5FD8E401C7A47f60eda8ec',
+      },
+      v3: {
+        testnet: '0xb9680017ECc4266C15d818B199E22AAF922cD3c8',
+      },
+    },
+  }
+  return address[env.network.slug][env.network.protocols.aave][env.network.type]
+}
+
+export const getDelegatorFactoryAddress = (env: environment) => {
+  const address: stringTree2levels = {
+    ethereum: {
+      testnet: '0x4a85Db8996514eDE8001337056095537AC8D23dc',
+    },
+    arbitrum: {
+      testnet: '0x91722c6008EeC8bd5b685794aCa362337a60Ce4A',
+    },
+    avalanche: {
+      testnet: '0xCfFbbF36c1E8fe2E880575cC9cB23A94Ae295b07',
     },
   }
   return address[env.network.slug][env.network.type]
@@ -59,6 +136,22 @@ export const getNetworks: (env: environment) => { [key: string]: { [key: string]
       },
     },
   }
+}
+
+export const decimals = (symbol: string) => {
+  const decimals: { [key: string]: number } = {
+    EURS: 2,
+    USDT: 6,
+    USDC: 6,
+    WBTC: 8,
+  }
+  if (Object.keys(decimals).includes(symbol)) return decimals[symbol]
+  return 18
+}
+
+export const coins: { [key: string]: string[] } = {
+  ETH: ['arbitrum', 'ethereum'],
+  AVAX: ['avalanche'],
 }
 
 export const tokens: { [key: string]: { [key: string]: { [key: string]: {[key: string]: string} } } } = {

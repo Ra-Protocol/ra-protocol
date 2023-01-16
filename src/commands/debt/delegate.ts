@@ -1,40 +1,37 @@
 import {BaseCommand} from '../../baseCommand'
-import getWalletKey from '../../lib/wallet-key'
-import {asset, chain, mainnet, redeploy, amount, collateral} from '../../flags'
-import axios from 'axios'
+import {asset, chain, mainnet, amount, collateral} from '../../flags'
 import {Flags} from '@oclif/core'
+import {approveERC20} from '../../lib/ethers/common'
+import {buildEnvironment, environment} from '../../lib/environment'
+import {
+  approveBorrower,
+  deployDelegatorContract,
+  depositCoinAsCollateral,
+  depositCollateral,
+} from '../../lib/ethers/debt/delegate'
+import {ethers} from 'ethers'
+import DelegatorV2 from '../../lib/constants/contracts/AaveV2UniV2/DelegatorV2.json'
+import DelegatorV3 from '../../lib/constants/contracts/AaveV3UniV2/DelegatorV3.json'
+import {validateAmount, validateAsset, validateCollateral} from '../../lib/validate/environment'
+import {valueToBigNumber} from '../../lib/bignumber'
 
 export default class DebtDelegate extends BaseCommand<any> {
   static description = 'approve borrow request (delegate borrowing power request to a user)'
 
   static examples = [
     `$ ra-protocol debt delegate --chain arbitrum --borrower borrower@gmail.com --collateral ETH --asset DAI --amount 0.001
-{
-  contract: {
-    address: '0xf56846af288AbcAa1751f5Bc080E7bc4D93fAfBa',
-    explore: 'https://goerli.arbiscan.io/address/0xf56846af288AbcAa1751f5Bc080E7bc4D93fAfBa'
-  },
-  approve: {
-    transactionHash: '0xe9a010975288c6d49626a09e2b8ca355d968ddf8dc564be0438c67914844d12b',
-    explore: 'https://goerli.arbiscan.io/tx/0xe9a010975288c6d49626a09e2b8ca355d968ddf8dc564be0438c67914844d12b'
-  },
-  depositCoinAsCollateral: {
-    transactionHash: '0x7750522951fad50c0141d8f3cb2131695750ac286f89f0391fb7b5d85b76f875',
-    explore: 'https://goerli.arbiscan.io/tx/0x7750522951fad50c0141d8f3cb2131695750ac286f89f0391fb7b5d85b76f875'
-  },
-  approveBorrower: {
-    transactionHash: '0xde925d9111e00fd79e89dea30ff7d27f3a17fba812da72ba03b6a6b918254b52',
-    explore: 'https://goerli.arbiscan.io/tx/0xde925d9111e00fd79e89dea30ff7d27f3a17fba812da72ba03b6a6b918254b52'
-  }
-}
-credit delegation is approved
+Using wallet 0x85b4BCB925E5EBDe5d8509Fc22F0A850E03470dA on network arbitrum testnet
+Contract deployed at https://goerli.arbiscan.io/address/0xb164e2800d1C18704d2be0A548591c285637aF84
+Called depositCoinAsCollateral at https://goerli.arbiscan.io/tx/0xae58e97bd45d19fa3dc6be3a694b44f5fb00ce0b3cc852082109b344715993ed
+Available to borrow: 3.2 DAI
+Called approveBorrower at https://goerli.arbiscan.io/tx/0x1051387eda23dbfb43bd43793fb251b39ca6794046c7b7d73cbe6846f0ade995
+Credit delegation is approved
 `,
   ]
 
   static flags = {
     chain,
     mainnet,
-    redeploy,
     borrower: Flags.string({
       description: 'email of borrower',
       required: true,
@@ -45,43 +42,55 @@ credit delegation is approved
   }
 
   async run(): Promise<void> {
+    let delegateContractAddress
+    const env: environment = {} as any
     const {flags} = await this.parse(DebtDelegate)
-    const walletKey = await getWalletKey()
-    const params: {
-      [key: string]: any,
-    } = {
-      cli: this.config.version,
-      raApiKey: this.globalFlags['ra-key'],
-      walletKey: walletKey,
+    await buildEnvironment(env, flags, this.globalFlags, this.invisibleFlags)
+    const [collateralToken, collateralTokenDecimals] = validateCollateral(env)
+    const [borrowToken, borrowTokenDecimals] = validateAsset(env)
+    const amount = validateAmount(env, collateralTokenDecimals)
+    const params: { [key: string]: any } = {
       chain: flags.chain,
       'protocol-aave': this.globalFlags['protocol-aave'],
-      collateral: flags.collateral,
-      asset: flags.asset,
-      amount: flags.amount,
       borrower: flags.borrower,
     }
 
     if (flags.mainnet) {
       await this.risksConsent()
-      params.mainnet = true
     }
 
-    if (flags.redeploy) {
-      params.redeploy = true
+    const checkResponse = await this.callApi('/debt/delegate', params) // throws error if request already exists
+
+    const borrowContractAddress = checkResponse.data.borrowContractAddress
+    delegateContractAddress = checkResponse.data.delegateContractAddress
+    if (!delegateContractAddress) {
+      delegateContractAddress = await deployDelegatorContract(env)
+      await this.callApi('/debt/delegate', {
+        ...params,
+        contract: delegateContractAddress,
+      })
     }
 
-    const url = new URL(this.invisibleFlags['api-url'] + '/debt/delegate')
-    url.search = new URLSearchParams(params as keyof unknown).toString()
+    env.contracts.delegateContract = new ethers.Contract(delegateContractAddress, env.network.protocols.aave === 'v2' ? DelegatorV2 : DelegatorV3, env.network.managedSigner)
 
-    const response = await axios.get(url.href).catch(this.processApiError) as any
-    if (this.gotError) return
-
-    if (response) {
-      this.log(response.data)
+    if (env.network.useWrapper) {
+      await depositCoinAsCollateral(env, amount)
+    } else {
+      await approveERC20(env, collateralToken, delegateContractAddress, amount)
+      await depositCollateral(env)
     }
 
-    if (!this.gotError) {
-      this.log('credit delegation is approved')
-    }
+    const userAccountData = await env.contracts.delegateContract.getUserAccountData(delegateContractAddress)
+    const assetPrice = await env.contracts.delegateContract.getAssetPrice(borrowToken)
+    const availableToBorrow = ethers.utils.parseUnits(valueToBigNumber(userAccountData.availableBorrowsETH.toString()).div(assetPrice.toString()).toFixed(borrowTokenDecimals), borrowTokenDecimals)
+    console.log(`Available to borrow: ${ethers.utils.formatUnits(availableToBorrow, borrowTokenDecimals)} ${flags.asset}`)
+
+    await approveBorrower(env,
+      borrowContractAddress,
+      borrowToken,
+      availableToBorrow,
+    )
+
+    this.log('Credit delegation is approved')
   }
 }
