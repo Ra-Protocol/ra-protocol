@@ -19,7 +19,7 @@ $ npm install -g ra-protocol
 $ ra-protocol COMMAND
 running command...
 $ ra-protocol (--version)
-ra-protocol/0.12.1 darwin-x64 node-v14.21.2
+ra-protocol/0.12.2 darwin-x64 node-v14.21.2
 $ ra-protocol --help [COMMAND]
 USAGE
   $ ra-protocol COMMAND
@@ -55,7 +55,7 @@ DESCRIPTION
   Get/Set configuration
 ```
 
-_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.12.1/dist/commands/config/index.ts)_
+_See code: [dist/commands/config/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.12.2/dist/commands/config/index.ts)_
 
 ## `ra-protocol config get`
 
@@ -202,7 +202,7 @@ FLAGS
   -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
   -m, --mainnet                              specify to run on mainnet
   -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
-  --asset=<value>...                         (required) specify asset
+  --asset=<value>                            (required) specify asset
   --lender=<value>                           (required) email of lender
 
 DESCRIPTION
@@ -210,17 +210,10 @@ DESCRIPTION
 
 EXAMPLES
   $ ra-protocol debt borrow --chain arbitrum --lender lender@gmail.com --asset DAI --amount 1
-  {
-    flashloan: {
-      transactionHash: '0x11bc565368abbeec55df446eebe43e663419efc8cca7d15766f221c01cb6927a',
-      explore: 'https://goerli.arbiscan.io/tx/0x11bc565368abbeec55df446eebe43e663419efc8cca7d15766f221c01cb6927a'
-    },
-    withdraw: {
-      transactionHash: '0x3ae261ef80bdb8ff496136e8ff18229177461b615631db3f6b3f9ba7dcedb2a1',
-      explore: 'https://goerli.arbiscan.io/tx/0x3ae261ef80bdb8ff496136e8ff18229177461b615631db3f6b3f9ba7dcedb2a1'
-    }
-  }
-  Flashloan is complete
+  Using wallet 0x26811622A429E51370Df573c2dBD695242a878e7 on network arbitrum testnet
+  http://localhost:3000/api/debt/borrow?cli=0.12.1&raApiKey=ce10be268b2c006f1483012e97b68d8b&chain=arbitrum&protocol-aave=v3&lender=dmitry.matora%40gmail.com
+  Approved for borrowing: 3.2 DAI
+  Called flashloan at https://goerli.arbiscan.io/tx/0x8c1a93d9ad5865e5e1d9d6091b29481cabe364457bd3731104d44d58e63d2878
 
 FLAG DESCRIPTIONS
   -a, --amount=<value>  
@@ -241,7 +234,7 @@ FLAG DESCRIPTIONS
 
     force contract redeploy (on default, reusing last deployed contract)
 
-  --asset=<value>...  
+  --asset=<value>  
 
     specify asset
 
@@ -263,41 +256,27 @@ approve borrow request (delegate borrowing power request to a user)
 ```
 USAGE
   $ ra-protocol debt delegate -c ethereum|arbitrum|avalanche --borrower <value> --collateral <value> --asset
-    <value> [-m] [-r] [-a <value>]
+    <value> [-m] [-a <value>]
 
 FLAGS
   -a, --amount=<value>                       specify amount
   -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
   -m, --mainnet                              specify to run on mainnet
-  -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
-  --asset=<value>...                         (required) specify asset
+  --asset=<value>                            (required) specify asset
   --borrower=<value>                         (required) email of borrower
-  --collateral=<value>...                    (required) specify collateral
+  --collateral=<value>                       (required) specify collateral
 
 DESCRIPTION
   approve borrow request (delegate borrowing power request to a user)
 
 EXAMPLES
   $ ra-protocol debt delegate --chain arbitrum --borrower borrower@gmail.com --collateral ETH --asset DAI --amount 0.001
-  {
-    contract: {
-      address: '0xf56846af288AbcAa1751f5Bc080E7bc4D93fAfBa',
-      explore: 'https://goerli.arbiscan.io/address/0xf56846af288AbcAa1751f5Bc080E7bc4D93fAfBa'
-    },
-    approve: {
-      transactionHash: '0xe9a010975288c6d49626a09e2b8ca355d968ddf8dc564be0438c67914844d12b',
-      explore: 'https://goerli.arbiscan.io/tx/0xe9a010975288c6d49626a09e2b8ca355d968ddf8dc564be0438c67914844d12b'
-    },
-    depositCoinAsCollateral: {
-      transactionHash: '0x7750522951fad50c0141d8f3cb2131695750ac286f89f0391fb7b5d85b76f875',
-      explore: 'https://goerli.arbiscan.io/tx/0x7750522951fad50c0141d8f3cb2131695750ac286f89f0391fb7b5d85b76f875'
-    },
-    approveBorrower: {
-      transactionHash: '0xde925d9111e00fd79e89dea30ff7d27f3a17fba812da72ba03b6a6b918254b52',
-      explore: 'https://goerli.arbiscan.io/tx/0xde925d9111e00fd79e89dea30ff7d27f3a17fba812da72ba03b6a6b918254b52'
-    }
-  }
-  credit delegation is approved
+  Using wallet 0x85b4BCB925E5EBDe5d8509Fc22F0A850E03470dA on network arbitrum testnet
+  Contract deployed at https://goerli.arbiscan.io/address/0xb164e2800d1C18704d2be0A548591c285637aF84
+  Called depositCoinAsCollateral at https://goerli.arbiscan.io/tx/0xae58e97bd45d19fa3dc6be3a694b44f5fb00ce0b3cc852082109b344715993ed
+  Available to borrow: 3.2 DAI
+  Called approveBorrower at https://goerli.arbiscan.io/tx/0x1051387eda23dbfb43bd43793fb251b39ca6794046c7b7d73cbe6846f0ade995
+  Credit delegation is approved
 
 FLAG DESCRIPTIONS
   -a, --amount=<value>  
@@ -314,11 +293,7 @@ FLAG DESCRIPTIONS
 
     specify to run on mainnet
 
-  -r, --redeploy  
-
-    force contract redeploy (on default, reusing last deployed contract)
-
-  --asset=<value>...  
+  --asset=<value>  
 
     specify asset
 
@@ -326,7 +301,7 @@ FLAG DESCRIPTIONS
 
     email of borrower
 
-  --collateral=<value>...  
+  --collateral=<value>  
 
     specify collateral
 
@@ -343,14 +318,13 @@ Easiest, quickest option to get a flash loan up and running
 
 ```
 USAGE
-  $ ra-protocol debt repay -c ethereum|arbitrum|avalanche --lender <value> --asset <value> [-m] [-r] [-a <value>]
+  $ ra-protocol debt repay -c ethereum|arbitrum|avalanche --lender <value> --asset <value> [-m] [-a <value>]
 
 FLAGS
   -a, --amount=<value>                       specify amount
   -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
   -m, --mainnet                              specify to run on mainnet
-  -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
-  --asset=<value>...                         (required) specify asset
+  --asset=<value>                            (required) specify asset
   --lender=<value>                           (required) email of lender
 
 DESCRIPTION
@@ -358,17 +332,9 @@ DESCRIPTION
 
 EXAMPLES
   $ ra-protocol debt repay --chain arbitrum --lender lender@gmail.com --asset DAI --amount 1
-  {
-    approve: {
-      transactionHash: '0xe7c52a366800ae944590d7ca9072ddef9059902955b05bcce51ed22105550f9c',
-      explore: 'https://goerli.arbiscan.io/tx/0xe7c52a366800ae944590d7ca9072ddef9059902955b05bcce51ed22105550f9c'
-    },
-    repay: {
-      transactionHash: '0x67cf9436aef20919d2a434c4476f65c36208d4f6fc54effb3ecf8b7767f1c47b',
-      explore: 'https://goerli.arbiscan.io/tx/0x67cf9436aef20919d2a434c4476f65c36208d4f6fc54effb3ecf8b7767f1c47b'
-    }
-  }
-  Loan repayment is complete
+  Using wallet 0x26811622A429E51370Df573c2dBD695242a878e7 on network arbitrum testnet
+  ERC20 approved
+  Called repayDelegator at https://goerli.arbiscan.io/tx/0xaa0cc751c5b2325213f0449ba5256b585cc43a86c3fa5d921600873dc7fb3df1
 
 FLAG DESCRIPTIONS
   -a, --amount=<value>  
@@ -385,11 +351,7 @@ FLAG DESCRIPTIONS
 
     specify to run on mainnet
 
-  -r, --redeploy  
-
-    force contract redeploy (on default, reusing last deployed contract)
-
-  --asset=<value>...  
+  --asset=<value>  
 
     specify asset
 
@@ -410,13 +372,11 @@ Send loan request to a user
 
 ```
 USAGE
-  $ ra-protocol debt request -c ethereum|arbitrum|avalanche --lender <value> [-m] [-r] [-t]
+  $ ra-protocol debt request -c ethereum|arbitrum|avalanche --lender <value> [-m]
 
 FLAGS
   -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
   -m, --mainnet                              specify to run on mainnet
-  -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
-  -t, --transferable                         enable debt transfer support (experemental)
   --lender=<value>                           (required) email of lender
 
 DESCRIPTION
@@ -424,13 +384,10 @@ DESCRIPTION
 
 EXAMPLES
   $ ra-protocol debt request --chain arbitrum --lender lender@gmail.com
-  {
-    contract: {
-      address: '0x606a344B991635a112222111b5a27fcDd2b15BA1',
-      explore: 'https://goerli.arbiscan.io/address/0x606a344B991635a112222111b5a27fcDd2b15BA1'
-    },
-    request: { lender: 'lender@gmail.com', sent: true }
-  }
+  Using wallet 0x26811622A429E51370Df573c2dBD695242a878e7 on network arbitrum testnet
+  Contract deployed
+  https://goerli.arbiscan.io/address/0x0B39CBc3AE31f999d0418fc7FF0D4817A943B898
+  { request: { lender: 'dmitry.matora@gmail.com', sent: true } }
   Request is sent
 
 FLAG DESCRIPTIONS
@@ -443,14 +400,6 @@ FLAG DESCRIPTIONS
   -m, --mainnet  
 
     specify to run on mainnet
-
-  -r, --redeploy  
-
-    force contract redeploy (on default, reusing last deployed contract)
-
-  -t, --transferable  
-
-    enable debt transfer support (experemental)
 
   --lender=<value>  
 
@@ -514,7 +463,7 @@ FLAGS
   -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
   -m, --mainnet                              specify to run on mainnet
   -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
-  --asset=<value>...                         (required) specify asset
+  --asset=<value>                            (required) specify asset
   --loan=<value>                             (required) loan address
 
 DESCRIPTION
@@ -553,7 +502,7 @@ FLAG DESCRIPTIONS
 
     force contract redeploy (on default, reusing last deployed contract)
 
-  --asset=<value>...  
+  --asset=<value>  
 
     specify asset
 
@@ -582,8 +531,8 @@ FLAGS
   -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
   -m, --mainnet                              specify to run on mainnet
   -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
-  --asset=<value>...                         (required) specify asset
-  --collateral=<value>...                    (required) specify collateral
+  --asset=<value>                            (required) specify asset
+  --collateral=<value>                       (required) specify collateral
   --recipient=<value>                        (required) email of debt recipient
 
 DESCRIPTION
@@ -622,11 +571,11 @@ FLAG DESCRIPTIONS
 
     force contract redeploy (on default, reusing last deployed contract)
 
-  --asset=<value>...  
+  --asset=<value>  
 
     specify asset
 
-  --collateral=<value>...  
+  --collateral=<value>  
 
     specify collateral
 
@@ -732,14 +681,14 @@ Easiest, quickest option to get a flash loan up and running
 
 ```
 USAGE
-  $ ra-protocol quickflash -c ethereum|arbitrum|avalanche --asset <value> [-m] [-r] [-a <value>]
+  $ ra-protocol quickflash -c ethereum|arbitrum|avalanche --masset <value> [-m] [-r] [-a <value>]
 
 FLAGS
   -a, --amount=<value>                       specify amount
   -c, --chain=(ethereum|arbitrum|avalanche)  (required) specify which chain
   -m, --mainnet                              specify to run on mainnet
   -r, --redeploy                             force contract redeploy (on default, reusing last deployed contract)
-  --asset=<value>...                         (required) specify asset
+  --masset=<value>...                        (required) specify asset
 
 DESCRIPTION
   Easiest, quickest option to get a flash loan up and running
@@ -773,7 +722,7 @@ FLAG DESCRIPTIONS
 
     force contract redeploy (on default, reusing last deployed contract)
 
-  --asset=<value>...  
+  --masset=<value>...  
 
     specify asset
 
@@ -784,5 +733,5 @@ CONFIG USAGE
   $ ra-protocol config set --help
 ```
 
-_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.12.1/dist/commands/quickflash/index.ts)_
+_See code: [dist/commands/quickflash/index.ts](https://github.com/Ra-Protocol/ra-protocol/blob/v0.12.2/dist/commands/quickflash/index.ts)_
 <!-- commandsstop -->
