@@ -1,6 +1,6 @@
 {
   "name": "ra-protocol",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "description": "RA protocol",
   "author": "Dmitry Matora @dmatora",
   "bin": {
