@@ -46,7 +46,6 @@ const buildNetwork = (env: environment) => {
   const networks = getNetworks(env)
   env.network.useDashboard = env.globalFlags.dashboard === 'on'
   env.network.type = env.flags.mainnet ? 'mainnet' : 'testnet'
-  if (env.network.type === 'mainnet') throw new Error('mainnet operations are currently disabled for security upgrades')
   env.network.slug = env.flags.chain
   validateChainSupported(env)
   env.network = {
@@ -95,6 +94,7 @@ export const buildEnvironment = async (
   flags: any,
   globalFlags: any,
   invisibleFlags: any,
+  readOnly = false,
 ) => {
   env.flags = flags
   env.globalFlags = globalFlags
@@ -104,8 +104,10 @@ export const buildEnvironment = async (
   buildNetwork(env)
   await buildSigner(env)
   buildProtocols(env)
-  await buildAccount(env)
-  validateBalance(env)
+  if (!readOnly) {
+    await buildAccount(env)
+    validateBalance(env)
+  }
 }
 
 export const getTokenName = (

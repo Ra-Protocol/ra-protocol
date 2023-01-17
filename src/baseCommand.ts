@@ -46,12 +46,11 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
   }
 
   protected risksConsent = async () => {
-    this.error('mainnet operations are currently disabled for security upgrades')
     const yesAnswer = 'Yes, I am willing to lose funds'
     const noAnswer = 'No, I am NOT willing to lose funds'
     const question = await new Select({
       choices: [noAnswer, yesAnswer],
-      message: 'This is beta. On mainnet only use funds you`re willing to lose!',
+      message: 'This is beta. All contracts will expire in 30 days from deployment. On mainnet only use funds you`re willing to lose!',
     })
     const answer = await question.run()
     if (answer === noAnswer) {

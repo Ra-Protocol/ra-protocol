@@ -20,7 +20,7 @@ Your balance of debt to lender@gmail.com:
   async run(): Promise<void> {
     const env: environment = {} as any
     const {flags} = await this.parse(DebtStatus)
-    await buildEnvironment(env, flags, this.globalFlags, this.invisibleFlags)
+    await buildEnvironment(env, flags, this.globalFlags, this.invisibleFlags, true)
     const params: { [key: string]: any } = {
       chain: flags.chain,
       'protocol-aave': this.globalFlags['protocol-aave'],
